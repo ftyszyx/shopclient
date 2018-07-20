@@ -1,0 +1,46 @@
+/* 分页 */
+.tabbox{
+  background: #fff;
+    border: 1px solid #dcdfe6;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
+}
+.tabbox .head-list{
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e4e7ed;
+  overflow: hidden;
+  white-space: nowrap;
+  
+}
+
+.tabbox .head-list .headbox{
+  /* float: left; */
+  border: 1px solid transparent;
+  color: #909399;
+  padding: 0 20px;
+  height: 40px;
+  box-sizing: border-box;
+  line-height: 40px;
+  display: inline-block;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  margin: -1px -1px 0;
+}
+
+.tabbox .head-list .headbox:hover{
+  cursor: pointer;
+  color: #409eff;
+}
+
+.tabbox .head-list .headbox.is-active{
+  color: #409eff;
+  background-color: #fff;
+  border-right-color: #dcdfe6;
+  border-left-color: #dcdfe6;
+  
+}
+
+.tabbox .content-list{
+  padding: 15px;
+}

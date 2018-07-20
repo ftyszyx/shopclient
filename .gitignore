@@ -1,0 +1,6 @@
+/node_modules
+/dist
+/admin/config.js
+/shop/config.js
+/erp/config.js
+/erp/configtest.js

@@ -1,0 +1,30 @@
+.dailog-fade-enter-active, .dailog-fade-leave-active{
+    transition: all .2s;
+}
+.dailog-fade-enter, .dailog-fade-leave-to{
+    transform:translateY(100%);
+    opacity:.4;
+}
+
+.dailog-box {
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.dailog-box .dailog-mask {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,.6);
+}
+
+.dailog-box .dailog-content {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+}

@@ -1,0 +1,41 @@
+
+.albumlist{
+    display: inline-block;
+}
+
+.albumlist li{
+  display: inline-block;
+  width: 190px;
+    /* height:200px; */
+    padding: 5px 5px;
+    vertical-align: top;
+    cursor: pointer;
+    border:1px solid #130303;
+}
+.albumlist li:hover{
+   background-color: rgb(230, 230, 230);
+}
+.albumlist li .covers{
+  height: 120px;
+}
+.albumlist li .covers img{
+  max-width: 170px;
+    max-height:120px;
+    /* min-height: 160px; */
+}
+
+.albumlist li .namebox{
+  padding: 5px 10px;
+}
+
+
+.albumlist .buttonbox{
+  display: inline-block;
+}
+
+.albumlist .buttonbox a{
+  display: inline-block;
+  margin-top: 2px;
+  text-align: center;
+  width:70px;
+}

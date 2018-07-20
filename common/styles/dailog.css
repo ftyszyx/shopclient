@@ -1,0 +1,63 @@
+
+/* 对话框 */
+.dialog-mask{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 1000;
+}
+
+.dialog {
+  position: relative;
+  margin: 20px auto ;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  box-sizing: border-box;
+  width: 30%;
+  padding: 10px;
+}
+
+.dialog .header{
+  padding: 15px;
+  padding-bottom: 10px;
+}
+
+.dialog .header .title{
+  line-height: 24px;
+  font-size: 18px;
+  color: #303133;
+}
+
+.dialog .header .close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  line-height: 20px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  opacity: 0.3;
+}
+
+.dialog .header .close:active {
+  box-shadow: none;
+}
+
+.dialog .header .close:hover {
+  background: #C72015;
+  color: #FFF;
+}
+
+.dialog .content{
+  margin:20px 10px;
+}
+
+.dialog .footer{
+  margin:20px 10px;
+}
+

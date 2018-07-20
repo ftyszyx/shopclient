@@ -1,0 +1,106 @@
+.fixed{
+  position: fixed;
+  top:0px;
+  left: 0px;
+}
+
+.float-right{
+  float: right;
+}
+
+.float-left{
+  float: left;
+}
+
+.clearfix {
+  overflow: hidden;
+  zoom: 1;
+}
+
+.clearfix-after:before, .clearfix-after:after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.clearfix-hide{
+  overflow: hidden;
+}
+
+/* 下拉菜单 */
+.dropdown:hover .dropdown-content{
+  display: block;
+  position: absolute;
+  z-index: 999;
+}
+
+.dropdown-content{
+  display: none;
+}
+
+.dropdown{
+  display: inline-block;
+}
+
+
+.collapse-transition {
+  transition: .3s height ease-in-out, .3s padding-top ease-in-out, .3s padding-bottom ease-in-out
+}
+
+.require::before{
+  content: "*";
+  color:#ff4949;
+  margin-right:4px;
+}
+
+.search-box{
+  padding: 20px;
+  background-color: #e6e0e0;
+}
+
+.search-itembox{
+  display: inline-block;
+  padding:0 10px;
+  position: relative;
+}
+
+.search-tip{
+  color: red;
+  font-size: 11px;
+  margin: 5px 0;
+  width: 300px;
+}
+
+
+.itemlist{
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid #ebebeb;
+  padding: 10px;
+  margin:5px 0;
+}
+
+
+.tag-add{
+  display: inline-block;
+  background-color: #fff;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 9px 15px;
+
+}
+
+.btn-del,.btn-add{
+  display: inline-block;
+  border-radius: 4px 0 0 4px;
+  background: #f5f7fa;
+  text-align: center;
+  color: #606266;
+  width: 30px;
+  font-size: 14px;
+  cursor: pointer;
+}

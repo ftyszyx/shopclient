@@ -1,0 +1,374 @@
+.position-r {
+  position: relative;
+}
+.menu-setting-area {
+  margin: 0;
+}
+.menu-setting-area .preview-area {
+  float: left;
+  margin-right: 12px;
+  position: relative;
+}
+.menu-setting-area .preview-area .mobile-menu-preview {
+  position: relative;
+  width: 317px;
+  height: 580px;
+  background: transparent url(https://res.wx.qq.com/mpres/htmledition/images/bg/bg_mobile_head_default2968da.png) no-repeat 0 0;
+  background-position: 0 0;
+  border: 1px solid #e7e7eb;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-hd {
+  color: #fff;
+  text-align: center;
+  padding-top: 30px;
+  font-size: 15px;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  margin: 0 30px;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e7e7eb;
+  background: transparent url(https://res.wx.qq.com/mpres/htmledition/images/bg/bg_mobile_foot_default2968da.png) no-repeat 0 0;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  padding-left: 43px;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .icon-menu-add {
+  background: url(https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z354723.png) 0 -18px no-repeat;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .sort-gray {
+  margin-top: -4px;
+  display: none;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .grid-item {
+  float: left;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .no-extra.grid-item {
+  float: none;
+  width: auto;
+  overflow: hidden;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .pre-menu-item {
+  position: relative;
+  float: left;
+  line-height: 50px;
+  text-align: center;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .pre-menu-item a {
+  display: block;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  color: #616161;
+  text-decoration: none;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .pre-menu-item .icon-menu-dot {
+  background: url(https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z354723.png) 0 -36px no-repeat;
+  width: 7px;
+  height: 7px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 2px;
+  margin-top: -2px;
+}
+.menu-setting-area .preview-area .mobile-menu-preview .mobile-bd .pre-menu-list .pre-menu-item .pre-menu-link {
+  border: 1px solid #44b549;
+  line-height: 48px;
+  background-color: #fff;
+  color: #44b549;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  background-color: #fafafa;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .sub-pre-menu-list li {
+  line-height: 44px;
+  border: 1px solid transparent;
+  margin: 0 -1px -1px;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .sub-pre-menu-list li a {
+  padding: 0 .5em;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .sub-pre-menu-list li a .sub-pre-menu-inner {
+  display: block;
+  border-top: 1px solid #e7e7eb;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  cursor: pointer;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box li:first-child a .sub-pre-menu-inner {
+  border-top-width: 0;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box li.current {
+  background-color: #fff;
+  border: 1px solid #44b549;
+  position: relative;
+  z-index: 1;
+  line-height: 44px;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .arrow-out {
+  bottom: -6px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: dashed;
+  border-color: transparent;
+  border-bottom-width: 0;
+  border-top-color: #d0d0d0;
+  border-top-style: solid;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .arrow {
+  position: absolute;
+  left: 50%;
+  margin-left: -6px;
+}
+.menu-setting-area .preview-area .sub-pre-menu-box .arrow-in {
+  bottom: -5px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: dashed;
+  border-color: transparent;
+  border-bottom-width: 0;
+  border-top-color: #fafafa;
+  border-top-style: solid;
+}
+.menu-setting-area .preview-area .icon-common.sort-gray {
+  background: url(https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/base/base_z3560fc.png) 0 -4779px no-repeat;
+}
+.menu-setting-area .preview-area .icon-common {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 100px;
+  overflow: hidden;
+}
+.menu-setting-area .preview-area .size1of1 {
+  width: 100%;
+}
+.menu-setting-area .preview-area .size1of3 {
+  width: 33.33%;
+}
+.menu-setting-area .preview-area .dn {
+  display: none;
+}
+.menu-setting-area .preview-area .icon-menu-add {
+  background: url(https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z354723.png) 0 0 no-repeat;
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: -2px;
+}
+.right-box {
+  flex: 1;
+  position: relative;
+}
+.right-box .editor-inner-notice {
+  min-height: 580px;
+  background-color: #f4f5f9;
+  border: 1px solid #e7e7eb;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+}
+.right-box .editor-inner {
+  min-height: 580px;
+  padding: 0 20px 5px;
+  background-color: #f4f5f9;
+  border: 1px solid #e7e7eb;
+}
+.right-box .editor-inner .menu-title-bar {
+  padding: 9px 0;
+  border-bottom: 1px solid #e7e7eb;
+  overflow: hidden;
+}
+.right-box .editor-inner .menu-title-bar .title {
+  float: left;
+  font-weight: 400;
+}
+.right-box .editor-inner .menu-title-bar .delete {
+  text-align: right;
+}
+.right-box .editor-inner .menu-title-bar .delete a {
+  color: #459ae9;
+  text-decoration: none;
+}
+.right-box .editor-inner .menu-form-box .msg-sender-tips {
+  padding-top: 10px;
+}
+.right-box .editor-inner .form-group {
+  margin-bottom: 10px;
+  margin-top: 30px;
+  padding-bottom: 0;
+}
+.right-box .editor-inner .form-item {
+  vertical-align: top;
+  zoom: 1;
+}
+.right-box .editor-inner .form-item .form-item-label {
+  vertical-align: middle;
+  float: left;
+  font-size: 12px;
+  color: #495060;
+  line-height: 1;
+  padding: 10px 12px 10px 0;
+  box-sizing: border-box;
+}
+.right-box .editor-inner .msg-content-container .msg-content {
+  background-color: #fff;
+  border: 1px solid #e7e7eb;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content {
+  height: auto;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel {
+  background-color: #fff;
+  min-height: 216px;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner {
+  width: 100%;
+  height: 215px;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item {
+  border: 2px dotted #dedede;
+  width: 40%;
+  height: 130px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item .icon {
+  font-size: 45px;
+  color: #c3c3c3;
+  padding-bottom: 5px;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item .font {
+  color: #8d8d8d;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item .cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-around;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item .cover .item {
+  border: none;
+  width: 40%;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item .cover .item:hover * {
+  color: #222;
+}
+.right-box .editor-inner .msg-content-container .msg-content .content .tab-panel .inner .content-box .item:hover {
+  border: 2px dotted #a9a9a9;
+}
+.right-box .editor-inner .msg-content-container .bind-app {
+  text-align: center;
+  padding: 70px 0;
+}
+.right-box .editor-inner .msg-content-container .bind-app .desc {
+  margin-bottom: 10px;
+}
+.right-box .editor-inner .msg-content-container .bind-app .btn {
+  background-color: #fff;
+  width: 120px;
+  border: 1px solid #e7e7eb;
+  color: #222;
+  display: inline-block;
+  overflow: visible;
+  height: 38px;
+  line-height: 38px;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.tabs .tabs-icon {
+  background: url(https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_tab_z25df2d.png);
+  margin-right: 3px;
+  margin-top: -2px;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.tabs .item {
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  width: 102px;
+  cursor: pointer;
+}
+.tabs .item .news {
+  background-repeat: no-repeat;
+  background-position: 0px -240px;
+}
+.tabs .item .image {
+  background-repeat: no-repeat;
+  background-position: 0px -60px;
+}
+.tabs .item .audio {
+  background-position: 0 -180px;
+  background-repeat: no-repeat;
+}
+.tabs .item .video {
+  background-position: 0 -120px;
+  background-repeat: no-repeat;
+}
+.tabs .selected {
+  color: #222;
+}
+.tabs .selected .news {
+  background-repeat: no-repeat;
+  background-position: 0px -270px;
+}
+.tabs .selected .image {
+  background-repeat: no-repeat;
+  background-position: 0px -90px;
+}
+.tabs .selected .audio {
+  background-position: 0 -210px;
+  background-repeat: no-repeat;
+}
+.tabs .selected .video {
+  background-position: 0 -150px;
+  background-repeat: no-repeat;
+}
