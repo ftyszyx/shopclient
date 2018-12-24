@@ -19,7 +19,7 @@
 1. 商店管理页面
 ![](../doc/erp/shop.png)
 1. 仓库管理页面
-![](../doc/erp/store.png)
+![](../doc/erp/store.jpg)
 1. 用户组管理页面
 ![](../doc/erp/usergroup1.png)
 1. 用户组权限页面

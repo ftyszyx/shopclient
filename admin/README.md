@@ -7,4 +7,4 @@
 
 功能页面介绍：
 1. 商城会员管理页面
-![](../doc/adminshop/member.png)
+![](../doc/adminshop/member.jpg)
