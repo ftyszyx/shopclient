@@ -57,9 +57,9 @@
                           <td>
                             {{field.title}}
                               <div class="btn-box-right">
-                              <img src='~assets/img/del.png' @click="del(field)">
-                              <img src='~assets/img/up.png' @click="up(field)">
-                              <img src='~assets/img/down.png' @click="down(field)">
+                              <img src='~assets/img/del.png' @click.stop="del(field)">
+                              <img src='~assets/img/up.png' @click.stop="up(field)">
+                              <img src='~assets/img/down.png' @click.stop="down(field)">
                               </div>
                           </td>
                         </tr>
@@ -188,7 +188,8 @@ export default{
       this.$emit('close');
     },
     sure() {
-      this.$emit('sure', this.rightList);
+      const templist = this.getheadList(this.rightList)
+      this.$emit('sure', templist);
     },
 
     getData() {
@@ -210,6 +211,13 @@ export default{
         console.log('error', error);
       });
     },
+    getheadList(headlist) {
+      const templist = [];
+      headlist.forEach(item => {
+        templist.push({ name: item.name, title: item.title })
+      })
+      return templist
+    },
     // 保存
     saveTemple() {
       if (this.selectTempleIndex === 0) {
@@ -221,7 +229,9 @@ export default{
             this.$message({ message: '模板的名字不能为空', type: 'error', duration: 1000 })
             return;
           }
-          post(this.serverModelName, 'add', { name: value, value: JSON.stringify(this.rightList), model: this.templeName })
+          console.log('rightlist', this.rightList)
+          const templist = this.getheadList(this.rightList)
+          post(this.serverModelName, 'add', { name: value, value: JSON.stringify(templist), model: this.templeName })
           .then(() => {
             this.$message({ message: '新增成功', type: 'success', duration: 1000 })
             this.getData();
@@ -232,7 +242,8 @@ export default{
         })
       } else {
         const id = this.templeList[this.selectTempleIndex].id;
-        post(this.serverModelName, 'update', { id, value: JSON.stringify(this.rightList) }).then(
+        const templist = this.getheadList(this.rightList)
+        post(this.serverModelName, 'edit', { id, value: JSON.stringify(templist) }).then(
         () => {
           this.$message({ message: '修改成功', type: 'success', duration: 1000 })
           this.getData();

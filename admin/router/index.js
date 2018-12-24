@@ -39,6 +39,7 @@
 
   // 订单
   const ShopOrder = () => import(/* webpackChunkName: "shoporder" */ 'src/views/order/shop_order.vue')
+  const PayCodeView = () => import(/* webpackChunkName: "paycode" */ 'src/views/order/paycode.vue')
 
 
   Vue.use(Router);
@@ -46,17 +47,17 @@
 
 // 后台
   export const adminRoute = [
-    {
-      path: '/admin',
-      component: Layout,
-      name: '首页',
-      icon: 'dashboard',
-      redirect: '/admin/index',
-      meta: { },
-      children: [
-      { path: 'index', component: Home, name: '待办事项', meta: { } }
-      ]
-    },
+    // {
+    //   path: '/admin',
+    //   component: Layout,
+    //   name: '首页',
+    //   icon: 'dashboard',
+    //   redirect: '/order',
+    //   meta: { },
+    //   children: [
+    //   { path: 'index', component: Home, name: '待办事项', meta: { } }
+    //   ]
+    // },
     {
       path: '/user',
       component: Layout,
@@ -91,7 +92,7 @@
       meta: { },
       children: [
       { path: 'index', component: AlbumList, name: '相册', meta: { } },
-      { path: 'photo', component: PhotoList, name: '图片', meta: { } }
+      { path: 'photo/:albumid', component: PhotoList, name: '图片', meta: { } }
       ]
     },
     {
@@ -122,13 +123,17 @@
       meta: { },
       children: [
       { path: 'index', component: ShopOrder, name: '订单', meta: {} },
-      { path: 'nopay', component: ShopOrder, name: '待支付', meta: { ordertype: global.orderStatusWaitPayValue } },
-      { path: 'nochek', component: ShopOrder, name: '待审核', meta: { ordertype: global.OrderStatusWaitcheckValue } },
-      { path: 'nosend', component: ShopOrder, name: '待发货', meta: { ordertype: global.OrderStatusWaitSendValue } },
-      { path: 'send', component: ShopOrder, name: '已发货', meta: { ordertype: global.orderStatusSendValue } },
-      { path: 'refund', component: ShopOrder, name: '退款中', meta: { ordertype: global.orderStatusRefundValue } }
+      { path: 'nopay', component: ShopOrder, name: '待支付', meta: { ordertype: global.orderStatusWaitPayValue, operWidth: '200px' } },
+      { path: 'nochek', component: ShopOrder, name: '待审核', meta: { ordertype: global.OrderStatusWaitcheckValue, operWidth: '200px' } },
+      { path: 'nosend', component: ShopOrder, name: '待发货', meta: { ordertype: global.OrderStatusWaitSendValue, operWidth: '200px' } },
+      { path: 'send', component: ShopOrder, name: '已发货', meta: { ordertype: global.orderStatusSendValue, operWidth: '200px' } },
+      { path: 'refund', component: ShopOrder, name: '退款中', meta: { ordertype: global.orderStatusRefundValue, operWidth: '250px' } },
+      { path: 'close', component: ShopOrder, name: '已关闭', meta: { ordertype: global.orderStatusCloseValue, operWidth: '200px' } },
+      { path: 'over', component: ShopOrder, name: '已完成', meta: { ordertype: global.orderStatusOverValue, operWidth: '200px' } },
+      { path: 'paycode', component: PayCodeView, name: '支付码', meta: { } }
       ]
     },
+
     {
       path: '/system',
       component: Layout,
@@ -156,6 +161,10 @@
     {
       path: '/',
       redirect: '/login'
+    },
+    {
+      path: '/admin',
+      redirect: '/order'
     },
   { path: '/404', component: Err404, menuhide: true }
 

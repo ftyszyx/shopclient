@@ -8,7 +8,7 @@ const data = {
 data.fieldList = [
   { name: 'id', title: '调货单号' },
   { name: 'check_status', title: '审核状态', sort: 0, selectList: global.checkStatus },
-  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.deleteStatus },
+  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.commonDel },
   { name: 'in_store', title: '调入仓库', changeable: true, selectList: [] },
   { name: 'in_store_name', title: '调入仓库' },
   { name: 'out_store', title: '调出仓库', changeable: true, selectList: [] },

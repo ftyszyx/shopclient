@@ -1,10 +1,10 @@
-<template>
+45564456<template>
     <transition name="dialog-fade">
         <div  class="dialog-box">
             <div class="dialog-mask" @click="close"></div>
             <div class="dialog-content" flex="dir:top main:center cross:left" >
                 <div class="detail" flex="dir:left main:left cross:top" >
-                    <img :src="itempic">
+                    <img :src="itempic+suffix">
                     <div class="info" flex="dir:top main:justify cross:left" >
                         <div class="title">{{iteminfo.name}}</div>
                         <div class="price"  >{{"￥"+price}}</div>
@@ -16,7 +16,7 @@
                     <div class="specbox" :key="sepcindex" v-for=" (specitem,sepcindex) in iteminfoCopy.spec.specList">
                         <!-- <hr class="with-margin-l"> -->
                         <h1 class="spectitle">{{specitem.name}}</h1>
-                         <div class="taglist" flex="dir:left main:left cross:center">
+                         <div class="flex-wrapbox" flex="dir:left main:left cross:center">
                              <div class="tag" :key="tagid" v-for="(tagitem,tagid) in specitem.list" :class="{active:tagitem.check}" @click="checkSpec(specitem,tagid)">
                                  {{tagitem.name}}
                              </div>
@@ -25,12 +25,12 @@
                 </div>
                 <div style="padding:3px;" flex="dir:left main:justify cross:center" >
                    <div flex="dir:left main:left cross:center">
-                      <div class="buttnadd" @click="selectnum=selectnum-1">-</div>
-                        <input  class="numinput" type="number"  v-model.number="selectnum">
-                      <div class="buttnadd" @click="selectnum=selectnum+1">+</div>
+                      <div class="buttnadd" @click="selectnum=delnum(selectnum,iteminfoCopy)">-</div>
+                        <input  class="numinput" type="number"  v-model.number="selectnum" v-on:change="input_numchange(arguments[0],iteminfoCopy)">
+                      <div class="buttnadd" @click="selectnum=addnum(selectnum,iteminfoCopy)">+</div>
                   </div>
                   <div class="pricetitle">
-                      合计:<span class="price">{{"￥"+price*selectnum}}</span>
+                      合计:<span class="price">{{"￥"+getPriceValue(price)*selectnum}}</span>
                   </div>
                 </div>
                 <div class="pricetitle" style="padding: 5px;">剩余<span class="price">{{storenum}}</span></div>
@@ -46,13 +46,14 @@
 import models from 'src/model'
 import { post } from 'common/api'
 import mymix from 'src/mixin'
+import global from 'src/global'
 // 加购物车
 export default{
   name: 'addcart',
   mixins: [mymix],
   data() {
     return {
-      selectnum: 1,
+      selectnum: global.basenum,
       price: 0,
       storenum: 0,
       itempic: '',
@@ -65,6 +66,7 @@ export default{
   },
   watch: {
     selectSpecId() {
+      console.log('selectSpecId change')
       this.updateItemInfo();
     }
   },
@@ -119,17 +121,18 @@ export default{
           return;
         }
       }
+      console.log('updatespecid')
       this.updateItemInfo();
     },
     updateItemInfo() {
       if (this.haveSpec) {
         const specinfo = this.iteminfoCopy.spec
         const detailinfo = specinfo.detailList[this.selectSpecId]
-        this.price = detailinfo.price || this.iteminfoCopy.price
+        this.price = this.getGroupPrice(detailinfo.price, detailinfo.group_price) || this.iteminfoCopy.price
         this.storenum = detailinfo.store_num || this.iteminfoCopy.store_num
         this.itempic = detailinfo.pic || this.iteminfoCopy.icon
       } else {
-        this.price = this.iteminfoCopy.price
+        this.price = this.getGroupPrice(this.iteminfoCopy.price, this.iteminfoCopy.group_price)
         this.storenum = this.iteminfoCopy.store_num
         this.itempic = this.iteminfoCopy.icon
       }
@@ -168,8 +171,23 @@ export default{
           if (findres != null) {
             findres.num += this.selectnum
           } else {
-            oldcartinfo.push({ itemid: this.iteminfo.id, specid: this.selectSpecId, price: this.price,
-              specname: this.sepcname, num: this.selectnum, name: this.iteminfo.name, pic: this.itempic, code: speccode })
+            oldcartinfo.push({
+              itemid: this.iteminfo.id,
+              specid: this.selectSpecId,
+              price: this.price,
+              specname: this.sepcname,
+              num: this.selectnum,
+              supply_source: this.iteminfo.supply_source,
+              name: this.iteminfo.name,
+              no_service: this.iteminfo.no_service,
+              pic: this.itempic,
+              code: speccode,
+              min_num: this.iteminfo.min_num,
+              basenum: this.iteminfo.basenum })
+          }
+          if (oldcartinfo.length > 200) {
+            this.$toast('购物车超过数量限制')
+            return;
           }
           post('user', 'UpdateCart', { shop_cart: JSON.stringify(oldcartinfo) })
           .then(() => {
@@ -182,8 +200,19 @@ export default{
         } else {
         // 直接买，跳转订单页面
           this.user.payList.splice(0)
-          this.user.payList.push({ itemid: this.iteminfo.id, specid: this.selectSpecId, price: this.price,
-            specname: this.sepcname, num: this.selectnum, name: this.iteminfo.name, pic: this.itempic, code: speccode })
+          this.user.payList.push({
+            itemid: this.iteminfo.id,
+            specid: this.selectSpecId,
+            price: this.price,
+            specname: this.sepcname,
+            num: this.selectnum,
+            supply_source: this.iteminfo.supply_source,
+            name: this.iteminfo.name,
+            pic: this.itempic,
+            code: speccode,
+            min_num: this.iteminfo.min_num,
+            no_service: this.iteminfo.no_service,
+            basenum: this.iteminfo.basenum })
 
           this.$router.push({ path: '/payorder' });
         }
@@ -194,7 +223,13 @@ export default{
     // this.selectnum = this.num
     this.haveSpec = this.iteminfo.spec.detailList.length > 0
     // this.selectSpecId = this.specid
-    this.selectnum = 1
+
+    this.selectnum = this.iteminfo.basenum
+    console.log('this.iteminfo', this.iteminfo)
+    if (this.iteminfo.min_num && this.iteminfo.min_num > this.selectnum) {
+      console.log('this.iteminfo', this.iteminfo)
+      this.selectnum = this.iteminfo.min_num
+    }
     this.selectSpecId = 0
     this.iteminfoCopy = JSON.parse(JSON.stringify(this.iteminfo));
 
@@ -212,7 +247,7 @@ export default{
         sepcinfo.specList[specitem.specid].list[specitem.tagid].check = true
       })
     }
-
+    // console.log('add cart create')
     this.updateItemInfo()
   }
 
@@ -309,9 +344,6 @@ export default{
     color: #fff;
 }
 
-.taglist{
-  flex-wrap:wrap;
-}
 
 .title{
   line-height: 1.5;

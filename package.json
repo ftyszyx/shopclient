@@ -5,13 +5,30 @@
   "author": "ftyszyx <whyzi@qq.com>",
   "private": true,
   "scripts": {
-    "admin": "cross-env NODE_ENV=development node build/dev-server.js --web admin --port 8100 --out admin",
+    "buildall":"npm run erpbuild && npm run shopbuild && npm run adminbuild &npm run shipbuild&npm run adminshipbuild",
+    
+    "admin": "cross-env NODE_ENV=development node build/dev-server.js --web admin --port 8100 ",
     "adminbuild": "cross-env NODE_ENV=production node build/build.js --web admin  --port 8100 --out admin",
-    "shop": "cross-env NODE_ENV=development node build/dev-server.js --web shop --port 8200 --out shop",
+
+    "adminhome": "cross-env NODE_ENV=development node build/dev-server.js --router homeadmin.js --web admin --port 8300 --config confighome.js",
+    "adminhomebuild": "cross-env NODE_ENV=production node build/build.js --router homeadmin.js --web admin  --out adminhome --config confighome.js",
+
+    "adminship": "cross-env NODE_ENV=development node build/dev-server.js --router shipadmin.js --web admin --port 8500  --config configship.js",
+    "adminshipbuild": "cross-env NODE_ENV=production node build/build.js --router shipadmin.js --web admin  --out adminship --config configship.js",
+ 
+    "shop": "cross-env NODE_ENV=development node build/dev-server.js --web shop --port 8200 ",
     "shopbuild": "cross-env NODE_ENV=production node build/build.js --web shop --port 8200 --out shop",
-    "erp": "cross-env NODE_ENV=development node build/dev-server.js --web erp --port 8000 --out erp",
+
+    "shoptest": "cross-env NODE_ENV=development node build/dev-server.js --web shop --html shoptest --port 8200",
+    "shoptestbuild": "cross-env NODE_ENV=production node build/build.js --web shop --html shoptest --port 8200 --out shoptest",
+
+    "erp": "cross-env NODE_ENV=development node build/dev-server.js --web erp --port 8000 ",
     "erpbuild": "cross-env NODE_ENV=production node build/build.js --web erp --port 8000 --out erp",
-    "erptestbuild": "cross-env NODE_ENV=production node build/build.js --web erp --port 8000 --out erptest --config configtest.js"    
+
+    "erptestbuild": "cross-env NODE_ENV=production node build/build.js --web erp  --out erptest --config configtest.js",
+    
+    "shipbuild": "cross-env NODE_ENV=production node build/build.js --web ship --port 8400 --out ship",
+    "ship": "cross-env NODE_ENV=development node build/dev-server.js --web ship --port 8400 "
   },
   "dependencies": {
     "array-find-index": "^1.0.2",
@@ -101,7 +118,7 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
+    "last 7 versions",
     "not ie <= 8"
   ]
 }

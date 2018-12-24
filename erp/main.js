@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import models from 'src/model/index.js'
 import App from './app'
-import router from './router'
+import router from 'src/router'
 // 公共图标库
 import 'commoncss/reset.css'
 import 'commoncss/common.css'

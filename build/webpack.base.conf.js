@@ -18,14 +18,15 @@ module.exports =  function(pagename){
     extensions: ['.js', '.vue', '.json'],
         // 包含路径
     alias: {
+      "src/config.js":path.resolve(__dirname, '../'+config.webpath+"/"+config.configfile),
+      "src/router":path.resolve(__dirname, '../'+config.webpath+"/router/"+config.routerfile),
       vue$: 'vue/dist/vue.esm.js',
       '@': resolve('src'),
       src: path.resolve(__dirname, '../'+config.webpath),
       assets: path.resolve(__dirname, '../'+config.webpath+'/assets'),
       admin: path.resolve(__dirname, '../admin'),
       shop: path.resolve(__dirname, '../shop'),
-      erp: path.resolve(__dirname, '../erp'),
-      "src/config.js":path.resolve(__dirname, '../'+config.webpath+"/"+config.configfile),
+      erp: path.resolve(__dirname, '../erp'),      
       views: path.resolve(__dirname, '../'+config.webpath+'/views'),
       'element-ui': path.resolve(__dirname, '../common/element'),
       'mint-ui': path.resolve(__dirname, '../common/mint-ui'),
@@ -59,7 +60,10 @@ module.exports =  function(pagename){
       {
         test: /\.js$/,
         loader: 'babel-loader?cacheDirectory',
-        include: [path.resolve(__dirname, '../shop'), path.resolve(__dirname, '../admin'),path.resolve(__dirname, '../erp'),path.resolve(__dirname, '../common')]
+        include: [path.resolve(__dirname, '../shop'), path.resolve(__dirname, '../admin'),
+         path.resolve(__dirname, '../ship'),
+         path.resolve(__dirname, '../erp'),
+         path.resolve(__dirname, '../common')]
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg)(\?.*)?$/,

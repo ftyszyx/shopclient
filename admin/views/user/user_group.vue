@@ -7,6 +7,7 @@
             </template>
             <template slot="rowbtn" slot-scope="slotProps">
                 <a class="button-common" v-show="authDic.UserGroup_del.auth" @click="del(slotProps.value)">删除</a>
+                <a class="button-common"  @click="copy(slotProps.value)">复制</a>
                 <a class="button-common" v-show="authDic.UserGroup_edit.auth" @click="edit(slotProps.value)">修改</a>
             </template>
         </common-table>
@@ -206,6 +207,11 @@ export default{
     editShowBefore() {
       this.updateCheckList();
     },
+    copy(value) {
+      const changedata = Object.assign({}, value);
+      changedata.module_ids = value.module_ids
+      this.sendAdd(changedata)
+    },
     dialogClick(nowdata) {
       const olddata = Object.assign({}, this.dialogdata);
       let changedata = Object.assign({}, nowdata);
@@ -219,7 +225,6 @@ export default{
       console.log('edit nowdata', nowdata);
       console.log('edit before', this.dialogdata);
       changedata.module_ids = JSON.stringify(ids);
-
       if (this.dialogtitle === '新增') {
         this.sendAdd(changedata)
       } else {

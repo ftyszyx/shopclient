@@ -6,9 +6,9 @@
               <el-option
                       v-for="item in field.selectList"
                       v-if="!item.hide"
-                      :key="item.id"
+                      :key="item.id+''"
                       :label="item.select_name||item.name||item.title"
-                      :value="item.id">
+                      :value="item.id+''">
               </el-option>
           </el-select>
       </template>
@@ -17,9 +17,9 @@
               <el-option
                       v-for="item in field.mulSelectList"
                       v-if="!item.hide"
-                      :key="item.id"
+                      :key="item.id+''"
                       :label="item.select_name||item.name||item.title"
-                      :value="item.id">
+                      :value="item.id+''">
               </el-option>
           </el-select>
       </template>
@@ -65,7 +65,7 @@
       <common-pics :picspath="curvalue" v-on:updatepic="change(arguments[0])"></common-pics>
     </template>
       <template v-else-if="field.type==='number'">
-        <input  class="input-box" type='number' v-on:change="change()"  v-on:blur='validate(field)' v-model.number="curvalue">
+        <input  class="input-box" type='number' min="1" step="1" v-on:change="change()"  v-on:blur='validate(field)' v-model.number="curvalue">
         <i @click="clearitem()" v-show="(curvalue||'')!=''" class="el-input__icon el-icon-circle-close el-input__clear"></i>
       </template>
       <template v-else>

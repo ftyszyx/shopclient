@@ -1,8 +1,10 @@
 <template>
   <div style="width: 100%;"  flex="dir:top main:left cross:left">
      <div class="titletext">{{title}}</div>
-    <div flex="dir:left main:left cross:center" style="padding: 5px 0px;" class="itemlist">
-        <item-type-item :iteminfo="childitem" :key="childitem.id" v-for="childitem in itemlist" v-on:gototype="gotoItemType"></item-type-item>
+    <div  style="padding: 5px 0px;" class="item-wrap-parent">
+      <div :key="childitem.id" v-for="childitem in itemlist"  class="wrapitembox">
+        <item-type-item :iteminfo="childitem" v-on:gototype="gotoItemType"></item-type-item>
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +32,7 @@ export default{
   },
   methods: {
     gotoItemType(itemtypeid) {
+      console.log("go to",itemtypeid)
       this.$emit('gototype', itemtypeid)
     }
   },
@@ -46,7 +49,14 @@ export default{
   white-space: nowrap;
 }
 
-.itemlist{
-  flex-wrap:wrap;
+
+.item-wrap-parent{
+
+}
+
+.wrapitembox{
+  cursor: pointer;
+  width:30%;
+  display: inline-block;
 }
 </style>

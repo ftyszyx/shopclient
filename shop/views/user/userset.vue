@@ -31,7 +31,7 @@
 
           <div class="rowitem" flex="dir:left main:justify cross:center" >
             <span>账号</span>
-            <div  flex="dir:left main:left cross:center">
+            <div  @click="changeAccount()" flex="dir:left main:left cross:center">
                 <span>{{user.account}}</span>
             </div>
           </div>
@@ -44,14 +44,14 @@
             </div>
           </div>
 
-           <div class="rowitem" flex="dir:left main:justify cross:center" >
+           <!-- <div class="rowitem" flex="dir:left main:justify cross:center" >
             <span>手机</span>
             <div @click="changePhone()" flex="dir:left main:left cross:center">
                 <span v-if="user.phone">{{user.phone}}(修改手机号)</span>
                 <span v-else>绑定手机号</span>
                 <i class="iconfont zyx-arrow-right"></i>
             </div>
-          </div>
+          </div> -->
 
           <div class="rowitem" flex="dir:left main:justify cross:center" >
             <span>微信</span>
@@ -81,7 +81,7 @@ import model from 'src/model'
 Vue.component(ElUpload.name, ElUpload);
 
 export default{
-
+  name: 'userset',
   mixins: [mymix],
   data() {
     return {
@@ -120,6 +120,26 @@ export default{
             .then(() => {
               this.$toast('修改成功')
               this.user.name = value
+            }).catch(err => {
+              console.log(err)
+            })
+          }
+        }
+      }).catch(err => {
+        console.log(err)
+      });
+    },
+    changeAccount() {
+      this.$messagebox.prompt('请输入新的账号名').then(({ value, action }) => {
+        console.log(value, action)
+        if (action === 'confirm') {
+          if (value === '') {
+            this.$toast('不能为空')
+          } else {
+            post('user', 'UpdateAccount', { account: value })
+            .then(() => {
+              this.$toast('修改成功')
+              this.user.account = value
             }).catch(err => {
               console.log(err)
             })

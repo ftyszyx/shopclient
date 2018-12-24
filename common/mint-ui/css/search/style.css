@@ -26,17 +26,8 @@
     z-index: 1;
 }
 .mint-searchbar-inner {
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     background-color: #fff;
     border-radius: 2px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
     height: 28px;
     padding: 4px 6px;
 }

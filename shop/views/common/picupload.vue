@@ -1,34 +1,40 @@
 <template>
   <div class="picbox" flex="dir:top main:left cross:left">
     <span >{{title}}</span>
-     <template v-if="curpath">
-       <div>
-        <img :style="{'max-width':width,'max-height':height}" class="headpic" :src="curpath">
-       </div>
-    </template>
     <el-upload  
-    :action="getUploadUrl('picupload')"
+    :action="getUploadUrl(urlpath)"
     :show-file-list="false" 
     :before-upload="beforeupload"
+    :before-upload-process="uploadprocess"
     name="upfile" 
     accept="image/*"
     :data="picform"
     :on-error="onerror"
     :on-success="handleSuccess">
-        <template v-if="(curpath||'')===''">
-        <button :style="{'width':width,'height':height}" class="inputbutton">
+         <button style="border-width:0px;">
+             <template v-if="curpath">
+              <div>
+                <img :style="{'max-width':width,'max-height':height}" class="headpic" :src="curpath+suffix">
+              </div>
+            </template>
+            <template v-else>
+              <div :style="{'width':width,'height':height}" class="inputbutton">
+                <i :style="{'font-size':height,'line-height':height}" class="iconfont zyx-add"></i>
+              </div>
+            </template>
+          </button>
           
-            <i :style="{'font-size':height,'line-height':height}" class="iconfont zyx-add"></i>
-          
-        </button>
-        </template>
     </el-upload>
+    <div v-if="curpath" class="viewbtn" @click="showeditPicviewPanel=true">查看</div>
+     <pic-view v-if="showeditPicviewPanel" v-on:close="showeditPicviewPanel=false" :picpath="curpath"></pic-view>
   </div>
 </template>
 
 <script>
 import ElUpload from 'common/components/upload'
+import PicView from './picview'
 import Vue from 'vue'
+import util from 'common/utils'
 Vue.component(ElUpload.name, ElUpload);
 import mymix from 'src/mixin'
 // 框架
@@ -38,16 +44,31 @@ export default{
   data() {
     return {
       curpath: '',
-      picform: {}
+      showeditPicviewPanel: false
+      // picform: {}
 
     }
   },
+  components: {
+    PicView
+  },
   props: {
+    picform: {
+      type: Object,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default() {
+        return { }
+      }
+    },
     title: {
       type: String
     },
     path: {
       type: String
+    },
+    urlpath: {
+      type: String,
+      default: 'picupload'
     },
     width: {
       type: String,
@@ -70,25 +91,58 @@ export default{
   },
 
   methods: {
-    beforeupload() {
+    uploadprocess(file, cb) {
+      console.log('begin uploadprocess')
+      const size = file.size / 1024 / 1024
+      if (size > 1) {
+        console.log('begin compress')
+        util.processImage(file, 1, bob => {
+          console.log('bob', bob)
+          cb(bob)
+        })
+      } else {
+        cb(file)
+      }
+    },
+    beforeupload(file) {
+      console.log('file', file)
+      const size = file.size / 1024 / 1024
+      console.log('file siz', size)
+      console.log('file type', file.type)
+      if (file.type.indexOf('image') === -1) {
+        this.$toast('只接受png和jpeg格式')
+        return false
+      }
+      if (size > 2) {
+        this.$toast('上传文件太大，超出限制')
+        return false
+      }
       this.$indicator.open({
         text: '图片上传中',
         spinnerType: 'fading-circle'
       })
+      return true
     },
+
     onerror(err) {
       this.$indicator.close()
-      console.log('err', err)
+      console.log('uploaderr', err)
       this.$toast('上传失败')
     },
     handleSuccess(data, file) {
-      console.log('resp', data, file)
-      if (data.code === 1) {
-        this.$toast('上传成功')
-        this.$emit('update', data.data.url)
-      } else {
-        this.$toast(data.data.message)
+      console.log('handleSuccess', data, file)
+      try{
+        if (data.code === 1) {
+          this.$toast('上传成功')
+          this.$emit('update', data.data.url)
+          this.$emit('success', data.data)
+        } else {
+          this.$toast(data.message)
+        }
+      }catch(err){
+        console.log(err)
       }
+      
       this.$indicator.close()
     }
   },
@@ -109,10 +163,16 @@ export default{
     border-bottom: 1px solid #e2e2e2;
 }
 
-
-.headpic{
-  /* max-width: ; */
-  }
+.viewbtn{
+    height: 30px;
+    width: 100px;
+    color: white;
+    background-color: #04be02;
+    line-height: 30px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+}
 
   .inputbutton{
     background-color: #fbfdff;

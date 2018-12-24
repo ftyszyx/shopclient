@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import models from 'src/model/index.js'
 import App from './app'
-import router from './router'
+import router from 'src/router'
 
 // 公共样式
 import 'commoncss/reset.css'
@@ -17,6 +17,7 @@ import 'commoncss/tabs.css'
 import 'commoncss/tag.css'
 import 'commoncss/loading.css'
 import 'commoncss/iconfont.css'
+import 'assets/css/iconfont.css'
 import 'commoncss/flex.css'
 
 import { post } from 'common/api'

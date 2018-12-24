@@ -3,7 +3,7 @@
   <common-search :search="search" :searchFieldList="searchFieldList" v-on:search="searchClick"></common-search>
 
    <!-- 表格  -->
-    <common-table ref="tablebox" :showfieldList="showfieldList" :dataList="dataList" v-on:sort="sort">
+    <common-table ref="tablebox" :showfieldList="showfieldList" :dataList="dataList" v-on:sort="sort" operwidth="250px">
             <template slot="topbtn">
                 <button @click="add()" class="button-common">新增</button>
             </template>
@@ -22,6 +22,7 @@
             <template slot="rowbtn" slot-scope="slotProps">
                  <a class="button-common" @click.stop="del(slotProps.value)">删除</a>
                  <a class="button-common" @click.stop="edit(slotProps.value)">修改</a>
+                 <a class="button-common" @click.stop="resetPass(slotProps.value)">重置密码</a>
                  <a class="button-common" @click.stop="refreshToken(slotProps.value)">刷新token</a>
             </template>
         </common-table>
@@ -120,7 +121,27 @@ export default{
     refreshToken(userinfo) {
       post(this.serverModelName, 'RefreshToken', { id: userinfo.id })
       .then(data => {
-        this.$message({ message: '刷新成功：用户id:' + userinfo.id + '  token:' + data.user_token + '  过期时间:' + this.formatTime(data.token_expire), type: 'success', duration: 4000 })
+        this.$alert('用户id:' + userinfo.id + '  token:' + data.user_token + '  过期时间:' + this.formatTime(data.token_expire), '刷新成功', {
+          confirmButtonText: '确定',
+          callback: action => {
+
+          }
+        });
+        // this.$message({ message: '刷新成功：用户id:' + userinfo.id + '  token:' + data.user_token + '  过期时间:' + this.formatTime(data.token_expire), type: 'success', duration: 4000 })
+      })
+      .catch(err => {
+        console.log('err', err)
+      })
+    },
+    resetPass(userinfo) {
+      post(this.serverModelName, 'rsetpass', { id: userinfo.id })
+      .then(data => {
+        this.$alert('新密码:' + data.newpass, '密码重置成功', {
+          confirmButtonText: '确定',
+          callback: action => {
+
+          }
+        });
       })
       .catch(err => {
         console.log('err', err)
@@ -131,7 +152,9 @@ export default{
     this.fieldList.forEach(item => {
       if (item.name === 'user_group') {
         item.selectList = model.userGroup.list
-        // console.log('user_group', item.selectList)
+      }
+      if (item.name === 'track_admin') {
+        item.selectList = model.user.adminlist
       }
       if (item.changeable) {
         this.$set(this.dialogdata, item.name, undefined)
@@ -142,8 +165,7 @@ export default{
     // console.log('meta', this.$route.meta)
 
     this.initpath();
-    util.filterField(this.fieldList, this.searchFieldList, false, 'name', 'account', 'phone', 'reg_time', 'last_login_time', 'is_del', 'wchat_appid');
-
+    util.filterField(this.fieldList, this.searchFieldList, false, 'name', 'account', 'phone', 'user_group', 'reg_time', 'last_login_time', 'is_del', 'wchat_appid');
     util.filterField(this.fieldList, this.showfieldList, true, 'id', 'shop_cart', 'user_group', 'user_group_type');
     this.getData();
   }

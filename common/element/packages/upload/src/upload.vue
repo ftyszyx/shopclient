@@ -27,6 +27,7 @@ export default {
     onSuccess: Function,
     onError: Function,
     beforeUpload: Function,
+    beforeUploadProcess:Function,
     drag: Boolean,
     onPreview: {
       type: Function,
@@ -56,6 +57,7 @@ export default {
   },
 
   methods: {
+    
     isImage(str) {
       return str.indexOf('image') !== -1;
     },
@@ -77,10 +79,24 @@ export default {
       if (postFiles.length === 0) { return; }
 
       postFiles.forEach(rawFile => {
-        this.onStart(rawFile);
-        if (this.autoUpload) this.upload(rawFile);
+        // this.onStart(rawFile);
+        // if (this.autoUpload) this.upload(rawFile);
+
+        const cb = (file) => {
+          this.onStart(file);
+          if (this.autoUpload) this.upload(file);
+        };
+
+        if (this.beforeUploadProcess/*rawFile.type.indexOf('image') === -1*/ ) {
+          
+          this.beforeUploadProcess(rawFile, blob => cb(blob));
+        } else {
+          cb(rawFile);
+        }
       });
     },
+    
+
     upload(rawFile, file) {
       this.$refs.input.value = null;
 

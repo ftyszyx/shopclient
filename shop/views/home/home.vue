@@ -2,7 +2,7 @@
   <div style="heigt:100%;">
       <!-- 轮播 -->
       <mt-swipe :auto="4000" style="height:250px;">
-        <mt-swipe-item  :key="item.name" v-for="item in swipelist"><img style="max-height:250px;"  :src="item.pic"></mt-swipe-item>
+        <mt-swipe-item  :key="item.name" v-for="item in swipelist"><img style="height:100%;display:block;margin:0 auto;"  :src="item.pic+suffix"></mt-swipe-item>
       </mt-swipe>
       <!-- 搜索 -->
       <mt-search v-model="app.search.name" v-on:searchok="gotoSearch"></mt-search>
@@ -21,16 +21,16 @@
       <div class="goodsbox clearfix" >
          <div class="goodsitems" v-for="adsitem in homeads" :key="adsitem.id">
            <template v-if="adsitem.adspos.title_pic||''!==''">
-              <img :src="adsitem.adspos.title_pic">
+              <img :src="adsitem.adspos.title_pic+suffix">
            </template>
            <template v-else>
              <h4>{{adsitem.adspos.title}}</h4>
            </template>
            <ul class="clearfix">
              <li :key="gooditem.id" v-for="gooditem in adsitem.ads" @click="gotoItem(gooditem.item_id)">
-               <img v-if="gooditem.pic||''!==''" v-lazy="gooditem.pic">
-               <img v-else v-lazy="gooditem.iteminfo.icon">
-               <span class="price">{{"¥"+gooditem.iteminfo.price}}</span>
+               <img v-if="gooditem.pic||''!==''" v-lazy="gooditem.pic+suffix">
+               <img v-else v-lazy="gooditem.iteminfo.icon+suffix">
+               <span class="price">{{"¥"+getGroupPrice(gooditem.iteminfo.price, gooditem.iteminfo.group_price)}}</span>
                <span class="name">{{gooditem.iteminfo.name}}</span>
              </li>
            </ul>
@@ -45,6 +45,7 @@
  import mymix from 'src/mixin'
 // 框架
 export default{
+   name: 'home',
    mixins: [mymix],
    data() {
      return {
@@ -55,6 +56,7 @@ export default{
      }
    },
    watch: {
+ 
    },
    components: {
    },
@@ -66,6 +68,7 @@ export default{
      }
    },
    created() {
+ 
    }
 
 

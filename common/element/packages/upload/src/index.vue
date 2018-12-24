@@ -53,6 +53,7 @@ export default {
       default: 'select'
     },
     beforeUpload: Function,
+    beforeUploadProcess: Function,
     onRemove: {
       type: Function,
       default: noop
@@ -235,6 +236,7 @@ export default {
         action: this.action,
         multiple: this.multiple,
         'before-upload': this.beforeUpload,
+        "before-upload-process":this.beforeUploadProcess,
         'with-credentials': this.withCredentials,
         headers: this.headers,
         name: this.name,

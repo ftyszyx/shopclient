@@ -10,6 +10,7 @@ const data = {
   account: '',
   mail: '',
   phone: '',
+  groupid: '',
   orders: [], // 订单
   shop_cart: [],
   order_waitpay: 0,
@@ -19,6 +20,8 @@ const data = {
   address: [],
   selectaddress: {},
   idnum: '',
+  send_user_name: 'Australia',
+  send_user_phone: '',
   idpic1: '',
   wchat_openid: '',
   idpic2: '',
@@ -29,19 +32,22 @@ const data = {
 // 初始化用户信息
 data.initUser = function(response) {
   this.name = response.name || ''
+  this.groupid = response.groupid || ''
   this.wchat_openid = response.wchat_openid || ''
   this.account = response.account
   this.mail = response.mail
   this.phone = response.phone
   if (response.shop_cart) {
-    const shop_cart = JSON.parse(response.shop_cart)
+    const shop_cart = JSON.parse(util.trim(response.shop_cart))
+
     util.copyList(shop_cart, this.shop_cart, item => {
       item.check = true
     })
   }
    // {itemid:1222,num:2,specid:3,name:鞋 specname:黄色;44;大,pic:""}
   if (response.address) {
-    const address = JSON.parse(response.address)
+    // console.log(util.trimspace(response.address))
+    const address = JSON.parse(util.trimspace(response.address))
     util.copyList(address, this.address, (item, index) => {
       // console.log('select address index ', index)
       if (index === 0) {

@@ -10,7 +10,7 @@ module.exports = {
     extract: isProduction
   }),
   autoprefixer: {
-    browsers: ['Android >= 2.3', 'ChromeAndroid > 1%', 'iOS >= 7'],
+    browsers: ["last 7 versions",'Android >= 2.3', 'iOS >= 6'],
     cascade: false  // 不美化输出 css
   }
 }

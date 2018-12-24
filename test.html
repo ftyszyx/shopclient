@@ -1,0 +1,110 @@
+<template>
+  <div>
+    <!-- 表格  -->
+    <div class="tablebox">
+      <div class="btnbox">
+        <button v-show="authDic.UserGroup_add.auth" @click="add" class="button-common">新增</button>
+      </div>
+      <table cellspacing="0" cellpadding="0" border="0" class="table-header" style="width:100%;">
+        <!-- 组 -->
+        <colgroup>
+          <col :key="field.name" v-for="field in showfieldList">
+          <col>
+        </colgroup>
+        <!-- 表头 -->
+        <thead class="table-thead">
+          <tr>
+            <th :key="field.name" v-for="(field,index) in showfieldList">
+              <div>{{field.title}}
+                <span class="caret-wrapper" @click="sort(field,index)">
+                  <i class="sort-caret zyx-ascending" :class="{'sort-active':field.sort==1}"></i>
+                  <i class="sort-caret zyx-descending" :class="{'sort-active':field.sort==2}"></i>
+                </span>
+              </div>
+            </th>
+            <th>
+              <div>操作</div>
+            </th>
+          </tr>
+        </thead>
+        <!-- 表内容 -->
+        <tbody>
+          <tr :key="useritem.name" v-for="useritem in dataList">
+            <td :key="field.name" v-for="field in showfieldList">
+              {{useritem[field.name]}}
+            </td>
+            <td>
+              <div>
+                <a class="button-common" v-show="authDic.UserGroup_del.auth" @click="del(useritem)">删除</a>
+                <a class="button-common" v-show="authDic.UserGroup_edit.auth" @click="edit(useritem)">修改</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 对话框 -->
+    <div class="dialog-mask" v-show="dialogShow" @click="dialogShow=false">
+      <div class="dialog" style="width:80%;" @click.stop>
+        <div class="header">
+          <span class="title">{{dialogtitle}}</span>
+          <span class="close" @click="dialogShow=false">X</span>
+        </div>
+        <div class="content">
+          <template v-for="field in fieldList" v-if="field.changeable">
+            <div v-if='field.name=="module_ids"' :key="field.name" class="form-itembox">
+              <span class="form-label require" style="line-height:35px;">{{field.title}}</span>
+              <div @click="selectAll()" class="all-module" style="line-height:35px;">
+                <input type="checkbox" v-model="allModuleChecked"></input>
+                <span>平台</span>
+              </div>
+              <!-- 模块列表 -->
+              <div class="modulebox">
+                <table class="module-table">
+                  <colgroup>
+                    <col>
+                    <col>
+                  </colgroup>
+                  <tbody>
+                    <template v-for="modleitem in moduleNameList">
+                      <tr class="table-tr">
+                        <!-- 主模块名 -->
+                        <td>
+                          <div @click="selectRow(modleitem)" class="main-module-cell">
+                            <input type="checkbox" v-model="modleitem.list[0].checked"></input>
+                            <span>{{modleitem.list[0].name}}</span>
+                          </div>
+                        </td>
+                        <!-- 子模块名 -->
+                        <td>
+                          <ul>
+                            <template v-for="methoditem in modleitem.list">
+                              <template v-if="methoditem.posid!==0">
+                                <li @click="selectOne(methoditem)" class="module-cell">
+                                  <input type="checkbox" v-model="methoditem.checked">
+                                  <span>{{getMethodName(methoditem.name)}}</span>
+                                </li>
+                              </template>
+                            </template>
+                          </ul>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div v-else :key="field.name" class="form-itembox">
+              <span class="form-label" :class='{"require":field.rules}'>{{field.title}}</span>
+              <input class="input-box" v-on:blur='validate(field)' v-model="dialogdata[field.name]">
+            </div>
+          </template>
+        </div>
+        <div class="footer">
+          <button class="button" @click="dialogShow=false">取消</button>
+          <button class="button button-blue" @click="dialogClick">确 定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

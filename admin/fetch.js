@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from 'src/config.js'
 import model from 'src/model'
 import Vue from 'vue';
-import router from './router'
+import router from 'src/router'
 import Message from 'element-ui/packages/message/index.js';
 axios.defaults.withCredentials = true; // 能保存session id
 // 封装了客户端的http请求

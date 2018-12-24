@@ -23,6 +23,16 @@
                          <template v-else-if="item.type==='text'">
                             <textarea  style="display: block;" v-model="item.value" rows="5" cols="100"></textarea>
                         </template>
+                        <template v-else-if="item.name==='logistics_default_task'">
+                              <el-select  clearable v-model="item.value" size="mini" :placeholder="item.info">
+                                    <el-option
+                                            v-for="item in logistics_taskList"                                            
+                                            :key="item.id+''"
+                                            :label="item.name"
+                                            :value="item.id+''">
+                                    </el-option>
+                                </el-select>
+                        </template>
                         <template v-else-if="item.name=='home_ads_set'">
                             <div class="tablebox" style="display: inline-block;vertical-align: middle;">
                                 <table>
@@ -79,6 +89,7 @@ export default{
       dataList: model[this.modelName].list, // 用户列表
       changeList: [],
       fieldList: model[this.modelName].fieldList, // 字段列表
+      logistics_taskList: model.logistics_task.list,
       curTabInfo: {},
       adsPosList: model.adspos.list,
       tabList: []
@@ -148,7 +159,7 @@ export default{
     initTabList() {
       this.tabList.splice(0);
       this.tabList.push({ name: '网站配置', check: false, type: 'web' });// 初始化
-      this.tabList.push({ name: '订单配置', check: false, type: 'order' });// 初始化
+      // this.tabList.push({ name: '订单配置', check: false, type: 'order' });// 初始化
     },
     changeTab(index) {
       console.log('change tab', index);

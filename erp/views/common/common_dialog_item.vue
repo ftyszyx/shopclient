@@ -1,25 +1,25 @@
 <template>
     <div :key="field.name" class="form-itembox">
-    <span class="form-label" :class='{"require":field.rules}'>{{field.title}}</span>
+    <span class="form-label" :class='{"require":field.rules}'>{{field.title}}<span v-if="field.info" style="color:red;">({{field.info}})</span></span>
       <template v-if='field.selectList'>
-          <el-select  v-on:change="change()" v-model="curvalue" size="mini" :placeholder="field.title">
+          <el-select  v-on:change="change()" clearable v-model="curvalue" size="mini" :placeholder="field.title">
               <el-option
                       v-for="item in field.selectList"
                       v-if="!item.hide"
-                      :key="item.id"
+                      :key="item.id+''"
                       :label="item.select_name||item.name||item.title"
-                      :value="item.id">
+                      :value="item.id+''">
               </el-option>
           </el-select>
       </template>
       <template v-else-if='field.mulSelectList'>
-          <el-select v-on:change="change()"  v-model="curvalue" multiple size="mini" :placeholder="field.title">
+          <el-select v-on:change="change()" clearable  v-model="curvalue" multiple size="mini" :placeholder="field.title">
               <el-option
                       v-for="item in field.mulSelectList"
                       v-if="!item.hide"
-                      :key="item.id"
+                      :key="item.id+''"
                       :label="item.select_name||item.name||item.title"
-                      :value="item.id">
+                      :value="item.id+''">
               </el-option>
           </el-select>
       </template>
@@ -45,18 +45,25 @@
 
       <template v-else-if="field.cascaderList">
             <el-cascader
-                v-on:change=change()
+            clearable
+            v-on:change=change()
                 expand-trigger="hover"
                 :options="field.cascaderList"
                 size="small"
                 v-model="curvalue">
             </el-cascader>
+  
       </template>
+       <template v-else-if="field.type=='pic'">
+      <common-pic-input showPreview :picpath="curvalue" v-on:updatepic="change(arguments[0])"></common-pic-input>
+    </template>
       <template v-else-if="field.type==='number'">
-        <input  class="input-box" type='number' v-on:change="change()"  v-on:blur='validate(field)' v-model.number="curvalue">
+        <input  class="input-box" type='number' min="1" step="1"  v-on:change="change()"  v-on:blur='validate(field)' v-model.number="curvalue">
+        <i @click="clearitem()" v-show="(curvalue||'')!=''" class="el-input__icon el-icon-circle-close el-input__clear"></i>
       </template>
       <template v-else>
           <input  class="input-box" v-on:change="change()" v-on:blur='validate(field)' v-model="curvalue">
+          <i @click="clearitem()" v-show="(curvalue||'')!=''" class="el-input__icon el-icon-circle-close el-input__clear"></i>
       </template>
   </div>
 </template>
@@ -64,6 +71,7 @@
 <script>
 import util from 'common/utils'
 import Message from 'element-ui/packages/message/index.js';
+import CommonPicInput from './common_inputpic'
 export default{
   mixins: [],
   name: 'Commondailogitem',
@@ -78,6 +86,7 @@ export default{
     }
   },
   components: {
+    CommonPicInput
   },
   props: {
     field: {
@@ -86,6 +95,10 @@ export default{
     value: null
   },
   methods: {
+    clearitem() {
+      this.curvalue = undefined;
+      this.$emit('change', this.curvalue);
+    },
     change(newvalue) {
       if (newvalue !== undefined) {
         // 有值时才赋值
@@ -94,7 +107,6 @@ export default{
       this.$emit('change', this.curvalue)
     },
     validate(field) {
-      // console.log('valid field', field)
       if (field.rules) {
         util.validate(field.rules, this.curvalue, field.name, errormsg => {
           Message({

@@ -1,5 +1,5 @@
 <template>
-   <li class="typeitem-box" @click="gotoItemType(iteminfo.id)" flex="dir:top main:left cross:center">
+   <li class="typeitem-box" @click="gotoItemType(iteminfo)" flex="dir:top main:left cross:center">
         <template v-if="iteminfo.pic">
             <img :src="iteminfo.pic">
         </template>
@@ -25,8 +25,8 @@ export default{
     }
   },
   methods: {
-    gotoItemType(itemtypeid) {
-      this.$emit('gototype', itemtypeid)
+    gotoItemType(iteminfo) {
+      this.$emit('gototype', iteminfo.id)
     }
   },
   created() {
@@ -36,7 +36,7 @@ export default{
 
 <style scoped>
 .typeitem-box{
-  width:30%;
+  /* width:30%; */
   padding: 5px 5px;
 }
 
@@ -49,7 +49,7 @@ export default{
 
 .typeitem-box p{
   overflow: hidden;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   font-size: 12px;
   color: #0a0a0a;
   padding: 5px 0;

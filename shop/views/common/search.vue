@@ -50,6 +50,7 @@ import Item from 'views/item/item'
 import { all } from 'common/api'
 // 框架
 export default{
+  name: 'commonsearch',
   mixins: [mymix],
   data() {
     return {
@@ -57,7 +58,7 @@ export default{
       page: 1,
       showAddCartPanel: false,
       fieldList: [
-          { name: 'order_id', title: '综合', sort: 2 },
+          { name: 'order_id', title: '综合', sort: 1 },
           { name: 'sell_num', title: '销量', sort: 0 },
           { name: 'price', title: '价格', sort: 0 }
       ],
@@ -125,6 +126,8 @@ export default{
       if (appsearch.item_type) {
         search['item.item_type'] = appsearch.item_type
       }
+      search['item.is_onsale'] = 1
+      search['item.store_num'] = ['>', 0]
       all('ShopItem', this.page, this.pagesize, order, search).then(
       data => {
         if (data.list) {

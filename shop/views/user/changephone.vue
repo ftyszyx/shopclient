@@ -7,6 +7,7 @@ import { post } from 'common/api'
 import mymix from 'src/mixin'
 import PhoneCheck from 'views/user/phonecheck'
 export default {
+  name: 'changephone',
   mixins: [mymix],
   data() {
     return {

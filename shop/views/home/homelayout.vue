@@ -1,14 +1,14 @@
 <template>
     <div flex="dir:top main:left cross:left" style="height:100%;">
-        <div class="flexbox1 content-box-bottom">
+        <div flex-box="1" class=" content-box-bottom">
             <router-view ></router-view>
         </div>
         <ul class="bottombar" flex="dir:left main:justify cross:center">
-          <li @click="goto('/home/index')" flex="dir:top main:left cross:center">
+          <!-- <li @click="goto('/home/index')" flex="dir:top main:left cross:center">
               <img slot="icon" v-show="selectpath==='/home/index'" src="~assets/img/home_check.png">
               <img slot="icon" v-show="selectpath!=='/home/index'" :src='"~assets/img/home_uncheck.png"'> 
               <span>首页</span>
-          </li>
+          </li> -->
           <li @click="goto('/home/itemtype')" flex="dir:top main:left cross:center">
               <img slot="icon" v-show="selectpath==='/home/itemtype'"  :src='"~assets/img/itemtype_check.png"'>
               <img slot="icon"  v-show="selectpath!=='/home/itemtype'" :src='"~assets/img/itemtype_uncheck.png"'>
@@ -39,6 +39,7 @@ import config from 'src/config.js'
 
 // 框架
 export default{
+  name: 'homelayout',
   mixins: [mymix],
   data() {
     return {
@@ -74,6 +75,7 @@ export default{
     }
   },
   created() {
+    console.log('homelayput create')
     this.initdata();
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="mint-search">
     <div class="mint-searchbar">
-      <div class="mint-searchbar-inner">
+      <div  flex="dir:left main:left cross:center" flex-box="1"  class="mint-searchbar-inner">
         <i class="mintui mintui-search"></i>
         <input
         ref="input"

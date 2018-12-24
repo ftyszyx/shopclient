@@ -5,12 +5,12 @@
             <div class="dailog-content" flex="dir:top main:center cross:left" >
                <div class="textrow" flex="dir:left main:left cross:center">
                         <span  class="input-title">身份证号：</span>
-                        <div  class="flexbox1  inputbox">
-                            <input class="inputvalue" placeholder="身份证号" type="text" v-model="idnum">
+                        <div  flex-box="1" class="inputbox">
+                            <input class="inputvalue"  placeholder="身份证上传后，身份证号自动识别" type="text" v-model="idnum">
                         </div>
                     </div>
-                <pic-upload title="身份证正面：" :path="idnumpic1" v-on:update="idnumpic1=arguments[0]"></pic-upload>
-                <pic-upload title="身份证反面：" :path="idnumpic2" v-on:update="idnumpic2=arguments[0]"></pic-upload>
+                <pic-upload :picform='{side:"front"}' urlpath="uploadidnum" title="身份证正面(有身份证号那一面)：" :path="idnumpic1" v-on:success="processIdnum"></pic-upload>
+                <pic-upload :picform='{side:"back"}'  urlpath="uploadidnum" title="身份证反面(有国徽那一面)：" :path="idnumpic2" v-on:update="idnumpic2=arguments[0]"></pic-upload>
                 <div class="button-submit" @click="submit()">确认提交</div>
             </div>
         </div>
@@ -21,7 +21,8 @@
 
 import mymix from 'src/mixin'
 import { post } from 'common/api'
-import PicUpload from 'views/common/picupload'
+import util from 'common/utils'
+import PicUpload from 'shop/views/common/picupload'
 export default{
   name: 'orderedit',
   mixins: [mymix],
@@ -29,7 +30,8 @@ export default{
     return {
       idnumpic1: '',
       idnumpic2: '',
-      idnum: ''
+      idnum: '',
+      name:""
     }
   },
   props: {
@@ -46,24 +48,23 @@ export default{
 
   },
   methods: {
+    processIdnum(data) {
+      console.log('res', data)
+      this.name=data.result["姓名"].Words
+      this.idnumpic1=data.url
+      this.idnum=data.result["公民身份号码"].Words
+    },
     close() {
       this.$emit('close')
     },
     submit() {
-      post('ShopOrder', 'UpdateIdNum', { id: this.orderInfo.id, idnum: this.idnum, idnumpic1: this.idnumpic1, idnumpic2: this.idnumpic2 })
-        .then(() => {
-          this.$toast('修改成功')
-          this.$emit('changeok')
-          this.$emit('close')
-        }).catch(err => {
-          console.log(err)
-        })
+      this.$emit('submit', { id: this.orderInfo.id, idnum: util.trimspace(this.idnum), idnumpic1: this.idnumpic1, idnumpic2: this.idnumpic2,name:util.trimspace(this.name) })
     }
   },
 
   created() {
-    this.idnumpic1 = this.orderInfo.idpic1
-    this.idnumpic2 = this.orderInfo.idpic2
+    this.idnumpic1 = this.orderInfo.idnumpic1
+    this.idnumpic2 = this.orderInfo.idnumpic2
     this.idnum = this.orderInfo.idnum
   }
 }
@@ -87,7 +88,7 @@ export default{
     width: 20%;
     text-align: left;
     line-height: 30px;
-    font-size: 14px;
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -96,8 +97,8 @@ export default{
     line-height: 30px;
     width:100%;
     height: 25px;
-    border: 0;
-        font-size: 14px;
+    /* border: 0; */
+    font-size: 16px;
 }
 
 .button-submit{

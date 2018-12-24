@@ -20,7 +20,7 @@ import models from 'src/model'
 import util from 'common/utils'
 import { post } from 'common/api'
 
-const usermodel = models.user;
+
 export default {
   name: 'login',
   data() {

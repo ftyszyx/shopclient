@@ -416,16 +416,20 @@
       getOption(value) {
         let option;
         const isObject = Object.prototype.toString.call(value).toLowerCase() === '[object object]';
-        for (let i = this.cachedOptions.length - 1; i >= 0; i--) {
-          const cachedOption = this.cachedOptions[i];
-          const isEqual = isObject
-            ? getValueByPath(cachedOption.value, this.valueKey) === getValueByPath(value, this.valueKey)
-            : cachedOption.value === value;
-          if (isEqual) {
-            option = cachedOption;
-            break;
+
+        if (value !== null && value !== undefined && value !== '') {
+          for (let i = this.cachedOptions.length - 1; i >= 0; i--) {
+            const cachedOption = this.cachedOptions[i];
+            const isEqual = isObject
+            ? (getValueByPath(cachedOption.value, this.valueKey) || '') === (getValueByPath(value, this.valueKey) || '')
+            : (cachedOption.value + '') === (value + '');
+            if (isEqual) {
+              option = cachedOption;
+              break;
+            }
           }
         }
+  
         if (option) return option;
         const label = !isObject
           ? value : '';

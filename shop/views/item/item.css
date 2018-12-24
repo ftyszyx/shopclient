@@ -2,15 +2,15 @@
 .itembox{
 
     border-bottom:1px solid #80808040;
-    height:  100px;
+    /* height:  100px; */
     padding: 10px;
     position: relative;
   }
   
   .itembox .itempic{
     /* min-width: 60px; */
-    min-height: 90px;
-    max-height: 100%;
+    
+    max-height: 100px;
     max-width: 40%;
     height: auto;
   }

@@ -11,6 +11,7 @@ data.fieldList = [
   { name: 'name', title: '名称', changeable: true },
   { name: 'shop_type', title: '商店类型', changeable: true, selectList: [] },
   { name: 'shop_type_name', title: '商店类型名', changeable: false },
+  { name: 'shop_edit_url', title: '同步商店网址', changeable: true, type: 'text' },
   { name: 'valid_expire_time', title: '有效时间', type: 'time' }
 ]
 data.initData = function(item) {

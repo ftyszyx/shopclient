@@ -20,6 +20,7 @@ import models from 'src/model/index.js'
 
 // 框架
 export default{
+  name: 'itemtypeselect',
   mixins: [mymix],
   data() {
     return {

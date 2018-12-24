@@ -10,9 +10,9 @@
                 <button v-show="authDic.BuyInStore_del.auth" @click="del()" class="button-common">废弃</button>
             </template>
             <template slot="rowbtn" slot-scope="slotProps">
-                  <a class="button-common" v-show="authDic.BuyInStore_del.auth" @click.stop="del(value)">废弃</a>
-                    <a class="button-common" v-show="authDic.BuyInStore_checkOk.auth" @click.stop="check(value)">审核</a>
-                    <a class="button-common" v-show="authDic.BuyInStore_edit.auth" @click.stop="edit(value)">修改</a>
+                  <a class="button-common" v-show="authDic.BuyInStore_del.auth" @click.stop="del(slotProps.value)">废弃</a>
+                    <a class="button-common" v-show="authDic.BuyInStore_checkOk.auth" @click.stop="check(slotProps.value)">审核</a>
+                    <a class="button-common" v-show="authDic.BuyInStore_edit.auth" @click.stop="edit(slotProps.value)">修改</a>
             </template>
         </common-table>
      
@@ -28,7 +28,7 @@
         </el-pagination>
         <!-- 新增和修改 -->
         <add-dialog 
-        ref="adddialog"
+            ref="adddialog"
             v-if="dialogShow"
             :title="dialogtitle"
             :fieldList="fieldList" 
@@ -129,6 +129,19 @@ export default {
     CommonSearch
   },
   methods: {
+
+    editShowBefore(item) {
+      console.log('edit before item', item)
+      this.detailItemList.splice(0);
+      const itemlist = JSON.parse(item.item_info);
+      itemlist.forEach(temp => {
+        this.detailItemList.push({ id: temp.id, num: temp.num });
+      });
+    },
+    addShowBefore() {
+      this.detailItemList.splice(0);
+    },
+
     check(item) {
       const arr = util.getCheckdItem(item);
       console.log('check item', arr);
@@ -188,7 +201,7 @@ export default {
       console.log('edit nowdata', nowdata);
       console.log('edit before', this.dialogdata);
       const olddata = Object.assign({}, this.dialogdata);
-      let changedata = Object.assign({}, nowdata);
+      const changedata = Object.assign({}, nowdata);
       const itemlist = this.$refs.itemlistID[0].dataList;
       changedata.item_info = [];
       itemlist.forEach(item => {
@@ -197,14 +210,24 @@ export default {
         }
       })
       changedata.item_info = JSON.stringify(changedata.item_info)
+      if (typeof olddata.item_info != 'string') {
+        olddata.item_info = JSON.stringify(olddata.item_info)
+      }
+
       if (this.dialogtitle === '新增') {
         changedata.item_info = JSON.parse(changedata.item_info)
         this.sendAdd(changedata)
       } else {
-        changedata = util.getChange(changedata, olddata);
-        changedata.id = olddata.id
-        changedata.item_info = JSON.parse(changedata.item_info)
-        this.sendEdit(changedata)
+        console.log('edit nowdata', changedata);
+        console.log('edit before', olddata);
+        const senddata = util.getChange(changedata, olddata);
+
+        senddata.id = olddata.id
+        console.log('changedata', senddata)
+        if (senddata.item_info) {
+          senddata.item_info = JSON.parse(changedata.item_info)
+        }
+        this.sendEdit(senddata)
       }
     }
 
@@ -213,16 +236,23 @@ export default {
   created() {
     // 初始化搜索相关数据
     console.log('searchfillist', this.searchFieldList);
-    util.filterField(this.fieldList, this.searchFieldList, true, 'id', 'info', 'item_info', 'check_user', 'build_user', 'build_time', 'store_name');
+    
     // 初始化弹出对话框数据
     this.fieldList.forEach(item => {
       if (item.name === 'check_user') {
         item.selectList = this.userList
       }
+       if (item.name === 'store_id') {
+        item.selectList = model.store.list
+      }
+      
       if (item.changeable) {
         this.$set(this.dialogdata, item.name, undefined);
       }
     });
+
+
+    util.filterField(this.fieldList, this.searchFieldList, true, 'id', 'info', 'item_info', 'check_user', 'build_user', 'build_time', 'store_name');
 
     post('user', 'allAuthUser', { moduleID: model.user.authDic.BuyInStore_checkOk.id })
         .then(response => {

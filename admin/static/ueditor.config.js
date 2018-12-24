@@ -424,8 +424,11 @@
 			tr:     ['rowspan', 'align', 'valign', 'class', 'style'],
 			tt:     [],
 			u:      [],
-			ul:     ['class', 'style'],
-			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
+            ul:     ['class', 'style'],
+            source: ['src', 'type'],
+            embed: ['type', 'class', 'pluginspage', 'src', 'width', 'height', 'align', 'style', 'wmode', 'play','autoplay','loop', 'menu', 'allowscriptaccess', 'allowfullscreen', 'controls', 'preload'],
+            iframe: ['src', 'class', 'height', 'width', 'max-width', 'max-height', 'align', 'frameborder', 'allowfullscreen'],
+			video:  ['class','autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width',  'style']
 		}
     };
 

@@ -14,9 +14,9 @@ data.fieldList = [
   { name: 'item_type_id', title: '商品类别id', selectList: [], tablename: 'item.type' },
   { name: 'store_id', title: '仓库', selectList: [] },
   { name: 'store_name', title: '仓库名', search: 'LIKE', tablename: 'store.name' },
-  { name: 'in_store', title: '在库数量', width: '80px' },
-  { name: 'on_way', title: '在途数', width: '60px' },
-  { name: 'in_sale', title: '已售数量', width: '80px' }
+  { name: 'in_store', title: '在库数量', search: 'LIKE', width: '80px' },
+  { name: 'on_way', title: '在途数', search: 'LIKE', width: '60px' },
+  { name: 'in_sale', title: '已售数量', search: 'LIKE', width: '80px' }
 ]
 data.initData = function(item) {
 }

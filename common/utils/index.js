@@ -28,15 +28,37 @@ utils.filterField = function(src, dest, except, fieldList) {
   }
 }
 
+utils.trim = function(text) {
+  return text.replace(/(^[\s]+)|([\s]+$)/g, '');
+}
+
+utils.trimspace = function(text) {
+  return text.replace(/([\s]+)/g, '')
+}
 // 拷贝列表，要保持表列表引用不变
 utils.copyList = function(src, dest, cb = null) {
-  dest.splice(0);
+  utils.copyListCommon(src, dest, cb, true)
+}
+
+utils.copyListCommon = function(src, dest, cb, clearflag) {
+  if (clearflag) {
+    dest.splice(0);
+  }
   if (src) {
     src.forEach((element, index) => {
       if (cb) {
-        cb(element, index);
+        const same = cb(element, index);
+
+        if (clearflag) {
+          dest.push(element);
+        } else {
+          if (!same) {
+            dest.push(element);
+          }
+        }
+      } else {
+        dest.push(element);
       }
-      dest.push(element);
     });
   }
 }
@@ -59,7 +81,7 @@ utils.ChangeOrder = function(list, index) {
   // console.log('list', list, 'index', index);
 
   for (let i = 0; i < list.length; i++) {
-    if (i !== index && list[i].sort != null) {
+    if (i !== index && list[i].sort !== null && list[i].sort !== undefined) {
       list[i].sort = 0;
     }
   }
@@ -169,18 +191,26 @@ utils.getTimeBrif = function() {
 
 utils.getTimeSearch = function(time) {
   const timearr = [];
-  timearr.push(['>', basetool.getTime(time[0]).valueOf() / 1000])
-  timearr.push(['<', basetool.getTime(time[1]).valueOf() / 1000])
+  timearr.push(['>', (basetool.getTime(time[0]).valueOf() / 1000) + ''])
+  timearr.push(['<', (basetool.getTime(time[1]).valueOf() / 1000) + ''])
   timearr.push('and');
   return timearr;
 }
 
 utils.getmultiSearch = function(selectarr) {
   const timearr = [];
+  if (selectarr.length === 0) {
+    return null;
+  }
   selectarr.forEach(item => {
     timearr.push(['=', item])
   })
-  timearr.push('or');
+
+  if (selectarr.length > 1) {
+    timearr.push('or');
+  }
+
+
   return timearr;
 }
 
@@ -241,7 +271,8 @@ utils.getChange = function(dest, src) {
   for (const key in dest) {
     if (dest.hasOwnProperty(key) && src.hasOwnProperty(key)) {
       if (dest[key] !== src[key]) {
-        change[key] = dest[key];
+        console.log(key, ' src:', src[key], ' dest:', dest[key])
+        change[key] = dest[key] || '';
       }
     }
   }
@@ -273,8 +304,8 @@ utils.initChild = function(dest, item) {
 }
 
 // 生成用于cascader的结构
-utils.updateCascaderChild = function(src_list, dest_list, openMenus, topTypeList) {
-  utils.copyList(src_list, dest_list, item => {
+utils.updateCascaderChild = function(src_list, dest_list, openMenus, topTypeList, dic) {
+  utils.copyListCommon(src_list, dest_list, item => {
     Vue.set(item, 'open', false);// 是否折叠或展开
     Vue.set(item, 'value', item.id)
     Vue.set(item, 'label', item.name)
@@ -284,8 +315,24 @@ utils.updateCascaderChild = function(src_list, dest_list, openMenus, topTypeList
     } else {
       Vue.set(item, 'show', false);
     }
+    if (dic[item.id + '']) {
+      // console.log('update', item.id)
+      for (let i = 0; i < dest_list.length; i++) {
+        if ((dest_list[i].id + '') === (item.id + '')) {
+          dest_list.splice(i, 1, item)// 替换
+          return true
+        }
+      }
+    }
+    dic[item.id + ''] = true
+    return false
+  }, false)
+
+  dest_list.forEach(item => {
+    item.children = null
   })
 
+  dest_list.sort((a, b) => parseInt(a.order_id) - parseInt(b.order_id))
   // 生成树结构
   dest_list.forEach(item => {
     dest_list.forEach(children => {
@@ -295,6 +342,9 @@ utils.updateCascaderChild = function(src_list, dest_list, openMenus, topTypeList
         children.parent = item;
       }
     })
+    if (item.children) {
+      item.children.sort((a, b) => parseInt(a.order_id) - parseInt(b.order_id))
+    }
   })
 
   // 树结构进行排序
@@ -307,8 +357,10 @@ utils.updateCascaderChild = function(src_list, dest_list, openMenus, topTypeList
   });
   utils.copyList(treelist, dest_list);
 
+  // 判断哪些要展开
   dest_list.forEach(item => {
     const openflag = openMenus.includes(item.id);
+
     if (item.children && item.children.length > 0) {
       item.open = openflag;
       if (item.level === 1) {
@@ -391,18 +443,70 @@ utils.remove = function(arr, val) {
 };
 
 
-utils.copytext = function(text) {
-  const input = document.createElement('input');
-  document.body.appendChild(input);
-  input.setAttribute('value', text);
-  input.select();
-  if (document.execCommand('copy')) {
-    document.execCommand('copy');
+utils.copytext = function(text, node) {
+  let inputgo = null;
+  if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+    // const el = $input.get(0);
+    const editable = node.contentEditable;
+    const readOnly = node.readOnly;
+    node.contentEditable = true;
+    node.readOnly = false;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    // node.setSelectionRange(0, 999999);
+    node.contentEditable = editable;
+    node.readOnly = readOnly;
   } else {
-    return false
+    inputgo = document.createElement('input');
+    document.body.appendChild(inputgo);
+    inputgo.setAttribute('value', text);
+    inputgo.select();
   }
-  document.body.removeChild(input);
-  return true;
+
+  let okflag = false
+  try {
+    if (document.execCommand('copy', false, null)) {
+      console.log('copy ok')
+      okflag = true
+    } else {
+      console.log('copy false')
+    }
+  } catch (err) {
+    console.log('err', err)
+  }
+  if (inputgo) {
+    document.body.removeChild(inputgo);
+  } else {
+    window.getSelection().removeAllRanges();
+  }
+
+  return okflag;
+}
+
+utils.processImage = function(srcfile, quality, callback) {
+  console.log('processImage quality', quality)
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  const reader = new FileReader();
+  const img = new Image();
+
+  img.onload = function() {
+    const targetWidth = Math.round(this.width * 0.5);
+    const targetHeight = Math.round(this.height * 0.5);
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    context.clearRect(0, 0, targetWidth, targetHeight);
+    context.drawImage(img, 0, 0, targetWidth, targetHeight);
+    canvas.toBlob(blob => {
+      blob.name = srcfile.name;
+      callback(blob);
+    }, srcfile.type, quality);
+  };
+  reader.onload = e => { img.src = e.target.result; };
+  reader.readAsDataURL(srcfile);
 }
 
 

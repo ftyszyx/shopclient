@@ -12,7 +12,7 @@ export default {
     return {
       totalsize: 0, // 总数量
       curpage: 1, // 当前第几页
-      pagesize: 10, // 每页的数量
+      pagesize: 20, // 每页的数量
       search: {}, // 搜索数据
       pagestart: 0,
       pageend: 0,
@@ -26,6 +26,10 @@ export default {
   watch: {
   },
   methods: {
+    getUploadUrl(action) {
+      // picupload
+      return conf.baseURL + action + '?token=' + window.localStorage.getItem('token') + '&uid=' + window.localStorage.getItem('uid');
+    },
     searchClick(nowsearch) {
       this.search = nowsearch
       this.getData()
@@ -38,7 +42,7 @@ export default {
         this.sendDel(data, JSON.stringify(checkarr))
       } else {
         const data = { id: item.id }
-        this.sendDel(data, item.name)
+        this.sendDel(data, item.name || item.id)
       }
     },
     sendDel(data, name) {
@@ -128,7 +132,9 @@ export default {
       }
     },
     getData(getall) {
+      // console.trace('get data');
       const order = util.getOrder(this.fieldList);
+      console.log('get order', order)
       const search = this.getSearch(this.searchFilter);
       let page = this.curpage;
       let pagesize = this.pagesize;
@@ -225,11 +231,15 @@ export default {
               tempvalue = util.getTimeSearch(value)
             } else if (item.mulSelectList) {
               tempvalue = util.getmultiSearch(value)
+            } else if (item.cascaderList && value !== null && value.length > 0) {
+              tempvalue = value[value.length - 1]
             }
-            if (item.search) {
-              searchdata[tablekey] = [item.search, tempvalue]
-            } else {
-              searchdata[tablekey] = tempvalue
+            if (tempvalue !== null && tempvalue !== undefined) {
+              if (item.search) {
+                searchdata[tablekey] = [item.search, tempvalue]
+              } else {
+                searchdata[tablekey] = tempvalue
+              }
             }
           }
         }

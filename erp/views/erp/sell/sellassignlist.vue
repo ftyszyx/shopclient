@@ -164,7 +164,7 @@ export default{
 
   created() {
     // 初始化搜索相关数据
-    util.filterField(this.fieldList, this.searchFieldList, false, 'id', 'close_status', 'order_info', 'store_id');
+    util.filterField(this.fieldList, this.searchFieldList, false, 'id', 'close_status', 'order_info', 'store_id',"info");
 
     // 初始化弹出对话框数据
     this.fieldList.forEach(item => {

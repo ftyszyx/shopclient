@@ -57,9 +57,9 @@
                           <td>
                             {{field.title}}
                               <div class="btn-box-right">
-                              <img src='~assets/img/del.png' @click="del(field)">
-                              <img src='~assets/img/up.png' @click="up(field)">
-                              <img src='~assets/img/down.png' @click="down(field)">
+                              <img src='~assets/img/del.png' @click.stop="del(field)">
+                              <img src='~assets/img/up.png' @click.stop="up(field)">
+                              <img src='~assets/img/down.png' @click.stop="down(field)">
                               </div>
                           </td>
                         </tr>
@@ -138,16 +138,19 @@ export default{
   },
   methods: {
     del(item) {
+      console.log(' del item', item)
       for (let index = 0; index < this.rightList.length; index++) {
         if (item.name === this.rightList[index].name) {
           this.rightList.splice(index, 1);
           this.leftList.push(item);
+          // console.log(' update', index, this.rightList, this.leftList)
+
           return;
         }
       }
     },
     add(item) {
-      // console.log('add item', item);
+      console.log('add item', item);
       for (let index = 0; index < this.leftList.length; index++) {
         if (item.name === this.leftList[index].name) {
           // console.log('left remove item', index);
@@ -159,7 +162,7 @@ export default{
       }
     },
     up(item) {
-      // console.log('up item', item);
+      console.log('up item', item);
       for (let index = 0; index < this.rightList.length; index++) {
         if (item.name === this.rightList[index].name) {
           if (index > 0) {
@@ -173,6 +176,7 @@ export default{
       }
     },
     down(item) {
+      console.log('down item', item);
       for (let index = 0; index < this.rightList.length; index++) {
         if (item.name === this.rightList[index].name) {
           if (index + 1 < this.rightList.length) {
@@ -188,10 +192,11 @@ export default{
       this.$emit('close');
     },
     sure() {
-      this.$emit('sure', this.rightList);
+      this.$emit('sure', this.getheadList(this.rightList));
     },
 
     getData() {
+      console.log('get data');
       all(this.serverModelName, null, null, null, { model: this.templeName }).then(
       response => {
         util.copyList(response.list, this.templeList, item => {
@@ -210,8 +215,17 @@ export default{
         console.log('error', error);
       });
     },
+    getheadList(headlist) {
+      console.log('get headlist')
+      const templist = [];
+      headlist.forEach(item => {
+        templist.push({ name: item.name, title: item.title })
+      })
+      return templist
+    },
     // 保存
     saveTemple() {
+      console.log('saveTemple')
       if (this.selectTempleIndex === 0) {
         this.$prompt('请输入新模板的名字', '新建模板', {
           confirmButtonText: '确定',
@@ -221,7 +235,7 @@ export default{
             this.$message({ message: '模板的名字不能为空', type: 'error', duration: 1000 })
             return;
           }
-          post(this.serverModelName, 'add', { name: value, value: this.rightList, model: this.templeName })
+          post(this.serverModelName, 'add', { name: value, value: this.getheadList(this.rightList), model: this.templeName })
           .then(() => {
             this.$message({ message: '新增成功', type: 'success', duration: 1000 })
             this.getData();
@@ -232,7 +246,7 @@ export default{
         })
       } else {
         const id = this.templeList[this.selectTempleIndex].id;
-        post(this.serverModelName, 'update', { id, value: this.rightList }).then(
+        post(this.serverModelName, 'edit', { id, value: this.getheadList(this.rightList) }).then(
         () => {
           this.$message({ message: '修改成功', type: 'success', duration: 1000 })
           this.getData();
@@ -244,6 +258,7 @@ export default{
     },
     // 删除
     delTemple() {
+      console.log('delTemple')
       const id = this.templeList[this.selectTempleIndex].id;
       post(this.serverModelName, 'del', { id }).then(
         () => {

@@ -14,43 +14,13 @@
 </template>
 
 <style lang="css">
-  @import "../../../src/style/var.css";
-
-  @component-namespace mint {
-    @component datetime {
-      width: 100%;
-
-      .picker-slot-wrapper, .picker-item {
-        backface-visibility: hidden;
-      }
-
-      .picker-toolbar {
-        border-bottom: solid 1px #eaeaea;
-      }
-
-      @descendent action {
-        display: inline-block;
-        width: 50%;
-        text-align: center;
-        line-height: 40px;
-        font-size: 16px;
-        color: $color-blue;
-      }
-
-      @descendent cancel {
-        float: left;
-      }
-
-      @descendent confirm {
-        float: right;
-      }
-    }
-  }
+ 
 </style>
 
 <script type="text/babel">
   import picker from 'mint-ui/packages/picker/index.js';
   import popup from 'mint-ui/packages/popup/index.js';
+  import 'mint-ui/css/datetime-picker/style.css';
   if (process.env.NODE_ENV === 'component') {
     require('mint-ui/packages/picker/style.css');
     require('mint-ui/packages/popup/style.css');
@@ -83,7 +53,7 @@
       startDate: {
         type: Date,
         default() {
-          return new Date(new Date().getFullYear() - 10, 0, 1);
+          return new Date(2017, 0, 1);
         }
       },
       endDate: {
@@ -195,23 +165,23 @@
         if (this.type === 'time') {
           value = values.map(value => ('0' + this.getTrueValue(value)).slice(-2)).join(':');
         } else {
-          let year = this.getTrueValue(values[0]);
-          let month = this.getTrueValue(values[1]);
+          const year = this.getTrueValue(values[0]);
+          const month = this.getTrueValue(values[1]);
           let date = this.getTrueValue(values[2]);
-          let maxDate = this.getMonthEndDay(year, month);
+          const maxDate = this.getMonthEndDay(year, month);
           if (date > maxDate) {
             this.selfTriggered = true;
             date = 1;
           }
-          let hour = this.typeStr.indexOf('H') > -1 ? this.getTrueValue(values[this.typeStr.indexOf('H')]) : 0;
-          let minute = this.typeStr.indexOf('m') > -1 ? this.getTrueValue(values[this.typeStr.indexOf('m')]) : 0;
+          const hour = this.typeStr.indexOf('H') > -1 ? this.getTrueValue(values[this.typeStr.indexOf('H')]) : 0;
+          const minute = this.typeStr.indexOf('m') > -1 ? this.getTrueValue(values[this.typeStr.indexOf('m')]) : 0;
           value = new Date(year, month - 1, date, hour, minute);
         }
         return value;
       },
 
       onChange(picker) {
-        let values = picker.$children.filter(child => child.currentValue !== undefined).map(child => child.currentValue);
+        const values = picker.$children.filter(child => child.currentValue !== undefined).map(child => child.currentValue);
         if (this.selfTriggered) {
           this.selfTriggered = false;
           return;
@@ -223,7 +193,7 @@
       },
 
       fillValues(type, start, end) {
-        let values = [];
+        const values = [];
         for (let i = start; i <= end; i++) {
           if (i < 10) {
             values.push(this[`${FORMAT_MAP[type]}Format`].replace('{value}', ('0' + i).slice(-2)));
@@ -242,7 +212,7 @@
       },
 
       generateSlots() {
-        let dateSlots = [];
+        const dateSlots = [];
         const INTERVAL_MAP = {
           Y: this.rims.year,
           M: this.rims.month,
@@ -250,7 +220,7 @@
           H: this.rims.hour,
           m: this.rims.min
         };
-        let typesArr = this.typeStr.split('');
+        const typesArr = this.typeStr.split('');
         typesArr.forEach(type => {
           if (INTERVAL_MAP[type]) {
             this.pushSlots.apply(null, [dateSlots, type].concat(INTERVAL_MAP[type]));
@@ -317,8 +287,8 @@
       },
 
       rimDetect(result, rim) {
-        let position = rim === 'start' ? 0 : 1;
-        let rimDate = rim === 'start' ? this.startDate : this.endDate;
+        const position = rim === 'start' ? 0 : 1;
+        const rimDate = rim === 'start' ? this.startDate : this.endDate;
         if (this.getYear(this.currentValue) === rimDate.getFullYear()) {
           result.month[position] = rimDate.getMonth() + 1;
           if (this.getMonth(this.currentValue) === rimDate.getMonth() + 1) {
@@ -429,7 +399,7 @@
         if (this.type.indexOf('date') > -1) {
           this.currentValue = this.startDate;
         } else {
-          this.currentValue = `${ ('0' + this.startHour).slice(-2) }:00`;
+          this.currentValue = `${('0' + this.startHour).slice(-2)}:00`;
         }
       }
       this.generateSlots();

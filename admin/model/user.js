@@ -1,11 +1,15 @@
 
 import global from 'src/global'
+import { all } from 'common/api'
+import util from 'common/utils'
 // 数据
 const data = {
   name: '',
   groupname: '',
+  limit_show_order: false,
   head: '',
   list: [],
+  adminlist: [], // 管理员列表
   authDic: {
     upload_PicUpload: { id: 1, auth: true }, // 编辑器图片上传
     ShopTag_all: { id: 2, auth: true }, // 标签
@@ -110,23 +114,25 @@ const data = {
 };
 // 所有字段名 sort:0 没排序  1 正序  2 逆序
 data.fieldList = [
-  { name: 'id', title: 'id' },
-  { name: 'account', title: '账号名', changeable: true, search: 'LIKE', rules: [{ required: true, message: '请输账号名' }] },
-  { name: 'name', title: '姓名', changeable: true, search: 'LIKE', rules: [{ required: true, message: '请输入姓名' }] },
-  { name: 'mail', title: '邮箱', changeable: true, rules: [{ required: true, message: '请输邮箱' }] },
-  { name: 'reg_time', title: '创建时间', sort: 0, type: 'time' },
-  { name: 'last_login_time', title: '上次登录时间', sort: 0, type: 'time' },
-  { name: 'phone', title: '手机号', changeable: true, search: 'LIKE', sort: 0, rules: [{ required: true, message: '请输手机号' }] },
-  { name: 'is_del', title: '状态', selectList: global.deleteStatus },
-  { name: 'wchat_openid', title: '微信', search: 'LIKE' },
+  { name: 'id', title: 'id', tablename: 'user.id' },
+  { name: 'account', title: '账号名', changeable: true, search: 'LIKE', rules: [{ required: true, message: '请输账号名' }], tablename: 'user.account' },
+  { name: 'name', title: '昵称', changeable: true, search: 'LIKE', rules: [{ required: true, message: '请输入姓名' }], tablename: 'user.name' },
+  { name: 'mail', title: '邮箱', changeable: true, rules: [{ required: true, message: '请输邮箱' }], tablename: 'user.mail' },
+  { name: 'reg_time', title: '创建时间', sort: 0, type: 'time', tablename: 'user.reg_time' },
+  { name: 'last_login_time', title: '上次登录时间', sort: 0, type: 'time', tablename: 'user.last_login_time' },
+  { name: 'phone', title: '手机号', changeable: true, search: 'LIKE', sort: 0, rules: [{ required: true, message: '请输手机号' }], tablename: 'user.phone' },
+  { name: 'is_del', title: '状态', selectList: global.deleteStatus, tablename: 'user.is_del' },
+  { name: 'wchat_openid', title: '微信', search: 'LIKE', tablename: 'user.wchat_openid' },
 
   { name: 'shop_cart', title: '购物车' },
-  { name: 'user_group', title: '用户组', changeable: true, selectList: [] },
+  { name: 'user_group', title: '用户组', changeable: true, selectList: [], tablename: 'user.user_group' },
   { name: 'user_group_type', title: '用户组类型', selectList: global.UserGroupType, tablename: 'group.group_type' },
   { name: 'head', title: '头像', changeable: true, type: 'pic', width: '150px' },
   { name: 'token_expire', title: 'token过期时间', type: 'time', width: '150px' },
+  { name: 'track_admin', title: '跟单员id', changeable: true, selectList: [], width: '70px' },
+  // { name: 'track_admin_name', title: '跟单员名' },
 
-  { name: 'user_group_name', title: '用户组' }
+  { name: 'user_group_name', title: '用户组', tablename: 'group.name' }
 ];
 
 // 初始化用户信息
@@ -135,6 +141,7 @@ data.initUser = function(data) {
   if (data.groupinfo) {
     this.groupname = data.groupinfo.name || '';
     this.head = data.head || '';
+    this.limit_show_order = data.limit_show_order === '1'
     if (data.groupinfo.group_type === global.AdminGroupType) {
       const authList = data.groupinfo.module_ids.split(',');
       if (data.modules) {
@@ -153,6 +160,15 @@ data.initData = function(item) {
   item.reg_time = parseInt(item.reg_time)
   item.last_login_time = parseInt(item.last_login_time)
   item.user_group_type = parseInt(item.user_group_type)
+}
+
+data.allAdmin = function() {
+  all('user', null, null, null, { 'group.group_type': global.AdminGroupType, 'user.is_del': 0 }).then(data => {
+    util.copyList(data.list, this.adminlist, this.initData)
+  })
+  .catch(error => {
+    console.log('error', error);
+  })
 }
 
 export default data

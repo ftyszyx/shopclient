@@ -15,6 +15,7 @@ import models from 'src/model/index.js'
 import mymix from 'src/mixin'
 // 框架
 export default{
+  name: 'itemtype',
   mixins: [mymix],
   data() {
     return {

@@ -74,7 +74,7 @@ export default{
       }
     })
     // 初始化表格需要显示的字段
-    util.filterField(this.fieldList, this.showfieldList, true, 'id', 'shop_type');
+    util.filterField(this.fieldList, this.showfieldList, true, 'id', 'shop_type',"shop_edit_url");
     // 获取数据
     this.getData();
   }

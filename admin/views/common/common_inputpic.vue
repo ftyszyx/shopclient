@@ -6,7 +6,7 @@
               <img  v-show="showimg" src="~common/img/upload-common-select.png">
             </template>
             <template v-else>
-              <img   v-show="showimg" :src="picpath" style="max-width:40px;">
+              <img   v-show="showimg" :src="picpath+suffix" style="max-width:40px;">
             </template>
            
            
@@ -28,7 +28,7 @@
                   title="图片预览"
                   width="200"
                   trigger="hover">
-                  <img :src="picpath" style="max-width:180px;">
+                  <img :src="picpath+suffix" style="max-width:180px;">
                   <img src="~common/img/upload-common-select.png" slot="reference">
                 </el-popover>
                 <photo-select v-if="selectphotoShow" v-on:close="selectphotoShow=false" v-on:sure="getData" ></photo-select>
@@ -45,8 +45,6 @@ export default{
   name: 'common_inputpic',
   data() {
     return {
-      miniurl: config.miniurl,
-      midurl: config.midurl,
       picpathEmpty: false,
       selectphotoShow: false
 

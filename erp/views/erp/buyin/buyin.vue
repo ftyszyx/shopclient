@@ -114,6 +114,7 @@ export default{
           changedata.item_info.push({ id: item.id, num: item.num, price: item.price });
         }
       })
+      // console.log('changedata.item_info', changedata.item_info);
       changedata.item_info = JSON.stringify(changedata.item_info)
       if (this.dialogtitle === '新增') {
         changedata.item_info = JSON.parse(changedata.item_info)
@@ -121,7 +122,11 @@ export default{
       } else {
         changedata = util.getChange(changedata, olddata);
         changedata.id = olddata.id
-        changedata.item_info = JSON.parse(changedata.item_info)
+        // console.log('changedata.item_info', changedata.item_info);
+        if (changedata.item_info) {
+          changedata.item_info = JSON.parse(changedata.item_info)
+        }
+
         this.sendEdit(changedata)
       }
     },

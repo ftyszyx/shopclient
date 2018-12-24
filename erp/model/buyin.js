@@ -8,7 +8,7 @@ data.fieldList = [
   { name: 'id', title: '采购单号', width: '200px', tablename: 'buyin.id' },
   { name: 'check_status', title: '审核状态', sort: 0, selectList: global.checkStatus, width: '80px', tablename: 'buyin.check_status' },
   { name: 'in_store_status', title: '入库状态', sort: 0, selectList: global.inStoreStatus, width: '80px', tablename: 'buyin.in_store_status' },
-  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.deleteStatus, width: '80px', tablename: 'buyin.close_status' },
+  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.commonDel, width: '80px', tablename: 'buyin.close_status' },
   { name: 'supplier', title: '供应商名', changeable: true, search: 'LIKE', tablename: 'buyin.supplier', rules: [{ required: true, message: '请输入供应商名' }], width: '80px' },
   { name: 'store_id', title: '仓库', changeable: true, selectList: [], width: '80px', tablename: 'buyin.store_id' },
   { name: 'store_name', title: '仓库名', width: '100px', tablename: 'store.store_name' },

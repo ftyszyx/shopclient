@@ -16,7 +16,17 @@ export default {
     }
   },
   created() {
+    console.log('app create', models.app.lastpath, models.app.topath)
     models.app.getAll()
+    // const rootpath = this.$route;
+    // console.log('rootpath', models.app.topath)
+    if (models.app.topath !== '/login') {
+      const token = window.localStorage.getItem('token') || ''
+      const uid = window.localStorage.getItem('uid') || ''
+      if (token !== '' && uid !== '') {
+        models.user.getinfo(null, { update: 'true' })
+      }
+    }
   }
 }
 </script>

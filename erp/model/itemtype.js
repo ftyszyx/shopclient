@@ -5,6 +5,7 @@ import { all } from 'common/api'
 const data = {
   list: [],
   openMenus: [],
+  dic: {},
   topTypeList: []
 }
 
@@ -25,7 +26,7 @@ data.all = function(cb) {
   all('item_type', null, null, null).then(
     Response => {
       Response.list.forEach(data.initData);
-      util.updateCascaderChild(Response.list, this.list, this.openMenus, this.topTypeList)
+      util.updateCascaderChild(Response.list, this.list, this.openMenus, this.topTypeList, this.dic)
       if (cb) {
         cb()
       }

@@ -63,21 +63,23 @@ export default{
     CommonSearchBox
   },
   methods: {
-
   },
 
   created() {
     // 初始化搜索相关数据
-    util.filterField(this.fieldList, this.searchFieldList, true, 'id', 'link');
+    util.filterField(this.fieldList, this.searchFieldList, true, 'id', 'link', 'module_name');
 
     // 初始化弹出对话框数据
     this.fieldList.forEach(item => {
       if (item.changeable) {
         this.$set(this.dialogdata, item.name, undefined)
       }
+      if (item.name === 'module_id') {
+        item.selectList = model.module.list
+      }
     })
     // 初始化表格需要显示的字段
-    util.filterField(this.fieldList, this.showfieldList, true, 'id');
+    util.filterField(this.fieldList, this.showfieldList, true, 'id', 'module_id');
     // 获取数据
     this.getData();
   }

@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <phone-check backhome title="登录页" suretext="登录" v-on:submit="handlelogin"></phone-check> 
-    <div @click="handleWchatLogin()" class="thirdlogin" flex="dir:top main:left cross:center" >
-      <i class="iconfont zyx-wechat" style="font-size:40px;color:#1f9a27;"></i>
-      <div style="font-size:16px;">微信登录</div>
+  <div flex="dir:top main:justify cross:left" style="height:100vh;">
+    <!-- <phone-check backhome title="登录页" suretext="登录" v-on:submit="handlelogin"></phone-check>  -->
+    <name-login backhome title="登录页" suretext="登录" v-on:submit="handleloginByName"></name-login>
+   
+    <div  flex="dir:top main:left cross:center" style="margin-bottom: 10%;">
+      <i @click="handleWchatLogin()"  class="iconfont zyx-wechat" style="font-size:40px;color:#1f9a27;"></i>
+      <div @click="handleWchatLogin()"  style="font-size:16px;">微信登录</div>
     </div>
   </div>
    
@@ -12,18 +14,33 @@
 <script>
 import { post } from 'common/api'
 import model from 'src/model'
-import PhoneCheck from 'views/user/phonecheck'
+import PhoneCheck from 'shop/views/user/phonecheck'
+import NameLogin from 'shop/views/login/loginname'
 export default {
+  name: 'login',
   data() {
     return {
     }
   },
   components: {
-    PhoneCheck
+    PhoneCheck,
+    NameLogin
   },
   methods: {
     handlelogin(phone, code) {
       post('login', 'loginwithphone', { phone, code })
+      .then(data => {
+        this.$toast('登录成功')
+        window.localStorage.setItem('token', data.token)
+        window.localStorage.setItem('uid', data.uid)
+        this.$router.push({ path: '/home' });
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    handleloginByName(username, password) {
+      post('login', 'login', { username, password })
       .then(data => {
         this.$toast('登录成功')
         window.localStorage.setItem('token', data.token)
@@ -61,6 +78,8 @@ export default {
       } else {
         this.$router.push({ path: lastpath });
       }
+    } else {
+      // this.handleWchatLogin();
     }
   }
 
@@ -68,11 +87,5 @@ export default {
 </script>
 
 <style scoped>
-.thirdlogin{
-  position: fixed;
-  bottom: 30px;
-  left: 0;
-  right: 0;
 
-}
 </style>

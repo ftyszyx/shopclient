@@ -15,7 +15,7 @@ data.fieldList = [
   { name: 'type', title: '类型', changeable: true, sort: 0, cascaderList: [] },
   { name: 'order_id', title: '排序id', changeable: true, type: 'number' },
   { name: 'summary', title: '摘要', changeable: true, type: 'text' },
-  { name: 'pic', title: '图片', changeable: true, type: 'pic', width: '150px' },
+  { name: 'pic', title: '文章展示图片', changeable: true, type: 'pic', width: '150px' },
   { name: 'is_del', title: '是否废弃', sort: 0, selectList: global.deleteStatus, width: '80px' },
 
   { name: 'content', title: '内容', changeable: true, type: 'post' }

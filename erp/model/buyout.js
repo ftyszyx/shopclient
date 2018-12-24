@@ -8,8 +8,8 @@ const data = {
 data.fieldList = [
   { name: 'id', title: '出库单号', width: '200px', tablename: 'buyout.id' },
   { name: 'check_status', title: '审核状态', sort: 0, selectList: global.checkStatus, width: '80px', tablename: 'buyout.check_status' },
-  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.deleteStatus, width: '80px', tablename: 'buyout.close_status' },
-  { name: 'store_id', title: '仓库', width: '80px', tablename: 'buyout.store_id' },
+  { name: 'close_status', title: '废弃状态', sort: 0, selectList: global.commonDel, width: '80px', tablename: 'buyout.close_status' },
+  { name: 'store_id', title: '仓库', selectList: [],width: '80px', tablename: 'buyout.store_id' },
   { name: 'store_name', title: '仓库名', width: '80px', tablename: 'store.name' },
   { name: 'buy_order', title: '采购订单号', changeable: true, width: '200px', tablename: 'buyout.buy_order' },
   { name: 'item_info', title: '商品详情', changeable: true, tablename: 'buyout.item_info' },

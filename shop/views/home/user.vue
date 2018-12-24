@@ -41,7 +41,7 @@
                   <div v-show="user.order_pay>0" class="tips">{{user.order_pay}}</div>
                 </div>
                
-               <span>待发货</span>
+               <span>待审核</span>
                
                </li>
              <li @click="gotoOrders(global.orderStatusSendValue)"  flex="dir:top main:center cross:center">
@@ -70,7 +70,7 @@
             </div>
           </div>
 
-        <div class="functionbox" flex="dir:left main:left cross:center" style="width:100%;">
+        <div class="functionbox flex-wrapbox" flex="dir:left main:left cross:center" style="width:100%;">
             <div class="functionitem" flex="dir:top main:center cross:center" @click="gotoMyset()">
             
             <i class="iconfont zyx-head" style="color:red;"></i>
@@ -80,7 +80,7 @@
             <i class="iconfont zyx-address" style="color:green;"></i>
             <span>收货地址</span>
           </div>
-          <a class="functionitem" flex="dir:top main:center cross:center" href="http://img.bqmarket.com/selldemo20180626.csv" >
+          <a class="functionitem" flex="dir:top main:center cross:center" href="http://img.bqmarket.com/selldemo20180821.csv" >
             
             <i class="iconfont zyx-moban" style="color:green;"></i>
             <span>模板下载</span>
@@ -112,6 +112,7 @@ import ElUpload from 'common/components/upload'
 import Vue from 'vue'
 Vue.component(ElUpload.name, ElUpload);
 export default{
+  name: 'homeuser',
   mixins: [mymix],
   data() {
     return {
@@ -234,7 +235,7 @@ export default{
 .functionbox{
   width:100%;
   padding: 5px;
-  flex-wrap:wrap;
+  
 }
 
 .functionitem{

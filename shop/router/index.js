@@ -32,10 +32,10 @@
       path: '/home',
       component: HomeLayout,
       name: '商城',
-      redirect: '/home/index',
+      redirect: '/home/itemtype',
       meta: { },
       children: [
-        { path: 'index', component: Home, name: '首页', meta: { KeepAlive: true } },
+        //{ path: 'index', component: Home, name: '首页', meta: { KeepAlive: true } },
         { path: 'itemtype', component: ItemType, name: '分类', meta: { KeepAlive: true } },
         { path: 'shopcart', component: ShopCart, name: '购物车', meta: { KeepAlive: true } },
         { path: 'user', component: User, name: '我的', meta: { KeepAlive: true } }
@@ -48,6 +48,11 @@
     },
     {
       path: '/payview/:id/:pay_id/:money',
+      component: PayView,
+      meta: { KeepAlive: true }
+    },
+    {
+      path: '/payviewtotal/:pay_id/:money',
       component: PayView,
       meta: { KeepAlive: true }
     },

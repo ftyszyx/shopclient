@@ -1,0 +1,21 @@
+
+@font-face {
+  font-family: "iconfont";
+  src:url('iconfont.ttf?t=1535098425573') format('truetype') /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+}
+
+
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-weiwanchen:before { content: "\e755"; }
+
+.icon-wancheng:before { content: "\e60d"; }
+
+
+

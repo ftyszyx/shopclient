@@ -3,7 +3,7 @@
          <div class="pics-box">
              <ul>
                  <li :key="picitem" v-for="picitem in pics">
-                     <img :src="picitem">
+                     <img :src="picitem+suffix">
                       <span class="close-button" @click="delitem(picitem)">×</span>
                  </li>
              </ul>

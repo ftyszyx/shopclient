@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import config from 'src/config'
+import config from 'src/config.js'
 export default{
   name: 'ueditor',
   data() {

@@ -19,10 +19,14 @@ import shopitem from './shop_item'
 import shopnotice from './shop_notice'
 import shoporder from './shop_order'
 import exportTable from './export_table'
+import logistics from './logistics'
+import paycode from './paycode'
+import logistics_task from './logistics_task'
 
 // 所有模块的数据
 const models = {
   user,
+  paycode,
   module,
   userGroup,
   config,
@@ -42,6 +46,8 @@ const models = {
   shoporder,
   shoptag,
   exportTable,
+  logistics,
+  logistics_task,
   app
 }
 

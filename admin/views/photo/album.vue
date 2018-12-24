@@ -73,7 +73,7 @@ export default{
   methods: {
     gotoDetail(info) {
       console.log('this', this)
-      this.$router.push({ path: '/album/photo', params: { album: info.id } })
+      this.$router.push({ path: '/album/photo/'+info.id })
     },
 
     setdefault(item) {

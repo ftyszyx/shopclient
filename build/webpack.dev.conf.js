@@ -14,7 +14,7 @@ function resolveApp(relativePath) {
 
 module.exports = function(pagename) {
   const baseWebpackConfig = require('./webpack.base.conf')(config.webpath)
-  const htmlname = config.webpath + '.ejs';
+  const htmlname = config.html + '.ejs';
   const webpackconf = merge(baseWebpackConfig, {
     entry: {
       app: path.join(__dirname,  '../'+config.webpath+"/", 'main.js')

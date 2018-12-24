@@ -1,4 +1,8 @@
-const global = {
+import comonglobal from 'common/global'
+const global = {}
+Object.assign(global, comonglobal)
+
+Object.assign(global, {
 
   // 一些状态配置
   checkStatus: [
@@ -66,9 +70,11 @@ const global = {
 
   commonDel: [
     { id: 0, title: '正常' },
-    { id: 1, title: '已作废' }
+    { id: 3, title: '已作废' }
   ]
 
-}
+})
+
+
 
 export default global;

@@ -103,7 +103,21 @@ export default{
     }
   },
   methods: {
-
+    beforeUpload(file) {
+       const size = file.size / 1024 / 1024
+       if (file.type.indexOf('image') === -1){
+        this.$toast('只接受png和jpeg格式')
+         return false
+      }
+      if (size > 2) {
+        this.$toast('上传文件太大，超出限制')
+        return false
+      }
+        if (this.search.album) {
+          this.album = this.search.album
+        } 
+      model.app.loading = true;
+    },
     changeAblum() {
       const arr = util.getCheckdItem(this.dataList);
       if (arr.length === 0) {
@@ -125,12 +139,15 @@ export default{
     // 删除
     del(item) {
       const keys = []
+      const arr = []
       if (!item) {
         util.getCheckdItem(this.dataList, item => {
           keys.push(item.key)
+          arr.push(item.id)
         });
       } else {
         keys.push(item.key)
+        arr.push(item.id)
       }
       this.sendDel({ id: arr, keys }, '所选')
     },
@@ -181,8 +198,15 @@ export default{
     })
     util.filterField(this.fieldList, this.searchFieldList, false, 'name', 'album');
 
-
-    this.album = 0
+   const params = this.$route.params
+    console.log(params)
+    if(params){
+       this.album = params.albumid
+       this.search.album=params.albumid
+    }else{
+       this.album = 0
+    }
+   
     this.updateAlbum()
   }
 }

@@ -27,7 +27,7 @@ import Indicator from '../packages/indicator'; // 加载圈
 import MessageBox from '../packages/message-box';// 弹出窗
 import InfiniteScroll from '../packages/infinite-scroll'; // 加载更多
 import Lazyload from '../packages/lazyload';
-// import DatetimePicker from '../packages/datetime-picker';
+import DatetimePicker from '../packages/datetime-picker';
 // import IndexList from '../packages/index-list';
 // import IndexSection from '../packages/index-section';
 // import PaletteButton from '../packages/palette-button';
@@ -62,7 +62,7 @@ const install = function(Vue, config = {}) {
   // Vue.component(Range.name, Range);
   Vue.component(Picker.name, Picker);
   // Vue.component(Progress.name, Progress);
-  // Vue.component(DatetimePicker.name, DatetimePicker);
+  Vue.component(DatetimePicker.name, DatetimePicker);
   // Vue.component(IndexList.name, IndexList);
   // Vue.component(IndexSection.name, IndexSection);
   // Vue.component(PaletteButton.name, PaletteButton);
@@ -113,8 +113,8 @@ module.exports = {
   Indicator,
   MessageBox,
   InfiniteScroll,
-  Lazyload
-  // DatetimePicker,
+  Lazyload,
+  DatetimePicker
   // IndexList,
   // IndexSection,
   // PaletteButton

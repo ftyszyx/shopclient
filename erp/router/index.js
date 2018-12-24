@@ -46,17 +46,17 @@
 
 // 后台
   export const adminRoute = [
-    {
-      path: '/admin',
-      component: Layout,
-      name: '首页',
-      icon: 'dashboard',
-      redirect: '/admin/index',
-      meta: { },
-      children: [
-      { path: 'index', component: Home, name: '待办事项', meta: { } }
-      ]
-    },
+    // {
+    //   path: '/admin',
+    //   component: Layout,
+    //   name: '首页',
+    //   icon: 'dashboard',
+    //   redirect: '/admin/index',
+    //   meta: { },
+    //   children: [
+    //   { path: 'index', component: Home, name: '待办事项', meta: { } }
+    //   ]
+    // },
     {
       path: '/user',
       component: Layout,
@@ -162,6 +162,10 @@
     {
       path: '/',
       redirect: '/login'
+    },
+    {
+      path: '/admin',
+      redirect: '/sell'
     },
   { path: '/404', component: Err404, menuhide: true }
 

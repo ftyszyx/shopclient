@@ -10,7 +10,7 @@
                 <!-- 已经过审商品列表 -->
                 <sell-total ref="total_box" v-show="totalDialogShow==true"  v-on:close="totalDialogShow=false"  :dataList="dataList"></sell-total>
 
-                <sell ref="sellList" showOper v-on:onDataChange="dataChange"  showCheckBox showSyncShop showCheckBack :showSearchFiled="SearchFiled"  :searchConditon="SearchCondition" >
+                <sell :initgetdata="false" ref="sellList" showOper v-on:onDataChange="dataChange"  showCheckBox showSyncShop showCheckBack :showSearchFiled="SearchFiled"  :searchConditon="SearchCondition" >
                     <button v-show="authDic.SellAssign_assignItem.auth" slot="button-box" @click="assign()" class="button-common">全部配货</button>
                     <button  slot="button-box" @click="showTotalPanel()" class="button-common">显示汇总</button>
                 </sell>
@@ -28,7 +28,7 @@ import model from 'src/model'
 import { all, post } from 'common/api'
 import myMixin from 'common/mixin/admin.js'
 import Sell from 'views/erp/sell/sell'
-import util from 'common/utils'
+// import util from 'common/utils'
 import SellOutEdit from 'views/erp/sell/selloutedit'
 import SellTotal from 'views/erp/sell/selltotal'
 import global from 'src/global'
@@ -36,15 +36,16 @@ export default{
   mixins: [myMixin],
   data() {
     return {
-      SearchFiled: ['id', 'num', 'pay_status', 'shop_order', 'item_name', 'item_short_name',
+      SearchFiled: ['id', 'num', 'pay_status', 'shop_order', 'item_name', 'item_short_name','supply_source',
         'customer_account', 'shop_name', 'customer_name', 'user_phone', 'logistics', 'track_man', 'pay_time', 'order_time'],
-      TableFiled: ['id', 'item_name',
+      TableFiled: ['id', 'item_name','supply_source',
         'num', 'status', 'shop_name', 'customer_account', 'unit_price', 'pay_money',
         'send_user_name', 'send_user_phone',
         'customer_name', 'track_man', 'shop_order',
         'user_info', 'sell_vip_type'],
       SearchCondition: { status: global.sellStatus_checkok },
       dataList: model.sell.list, // 用户列表
+      alldataList: [],
       tabList: [], // 标签页
       dialogShow: false,
       allStore: model.store.list,
@@ -63,6 +64,7 @@ export default{
   },
   watch: {
     allStore() {
+      console.log('storeage change');
       this.initTabList();
       this.changeTab(0)
     }
@@ -106,6 +108,7 @@ export default{
 
       all('sell', null, null, null, { 'sell.status': global.sellStatus_checkok, 'sell.store_id': this.curTabInfo.info.id }).then(
       data => {
+        this.alldataList = data.list;
         this.$refs.total_box.initList(data.list, totalItemList, orderList)
         let haveFlag = true;
         let need_itemInfo = null;
@@ -139,7 +142,7 @@ export default{
     dialogClick(info) {
       const changedata = {};
       changedata.id = []
-      this.dataList.forEach(item => {
+      this.alldataList.forEach(item => {
         changedata.id.push(item.id);
       })
       changedata.info = info;
@@ -155,12 +158,14 @@ export default{
         })
     },
     getData() {
+      // console.trace('get data');
       this.$refs.sellList.getData();
        // Object.assign(this.search, this.searchConditon);
     }
   },
   created() {
     this.initTabList();
+    // this.changeTab(0)
     this.$nextTick(() => {
       this.changeTab(0)
     })

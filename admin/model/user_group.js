@@ -11,9 +11,11 @@ data.fieldList = [
   { name: 'id', title: 'id', changeable: false },
   { name: 'name', title: '名称', changeable: true, sort: 0, rules: [{ required: true, message: '请输入用户组名' }] },
   { name: 'expire_time', title: '登录过期时间(单位s)', changeable: true, type: 'number' },
-  { name: 'module_ids', title: '权限', changeable: true },
+  { name: 'group_type', title: '类型', changeable: true, selectList: global.UserGroupType },
+  { name: 'limit_show_order', title: '是否限制订单显示', changeable: true, selectList: global.OrderLimitShoweStatus },
+  { name: 'module_ids', title: '权限', changeable: true }
 
-  { name: 'group_type', title: '类型', changeable: false, selectList: global.UserGroupType }
+
 ]
 
 data.all = function() {
@@ -26,7 +28,7 @@ data.all = function() {
 }
 
 data.initData = function(item) {
-  item.group_type = parseInt(item.group_type)
+  // item.group_type = item.group_type
   item.expire_time = parseInt(item.expire_time)
   if (item.group_type === global.SystemGroupType) {
     item.hide = true

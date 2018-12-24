@@ -4,7 +4,13 @@
     
        <div  class="tablebox">
           <div class="btnbox">
-             <el-upload v-if="showImport" class="upload-box" :action="uploadUrl" withCredentials :show-file-list="false"  name="file"  
+             <el-upload v-if="showImport" 
+             class="upload-box"
+              :action="uploadUrl" 
+              withCredentials 
+              :show-file-list="false"
+                name="file"  
+                :before-upload="beoreupload"
                :on-success="handleSuccess"
                :on-error="handleErr">
                   <button class="button-common">导入</button>
@@ -13,6 +19,7 @@
                   :action="changeShipnumUrl" 
                   withCredentials 
                   :show-file-list="false" 
+                  :before-upload="beoreupload"
                   name="file"  
                   :on-success="changeShipnumOk"
                   :on-error="handleErr">
@@ -29,24 +36,30 @@
                 
                 <button v-if="showSplit&&authDic.Sell_splitAllOrder.auth" @click="splitAll()" class="button-common">拆单(所有)</button>
                 <button v-if="showMerge&&authDic.Sell_mergeOrder.auth" @click="merge()" class="button-common">合单(勾选2个)</button>
-                <button v-if="showSyncShop" @click="syncShop()" class="button-common">同步物流到商城</button>
-
+                <button v-if="showSyncShop" @click="syncShop()" class="button-common">同步商城(勾选项)</button>
+                <button v-if="showSyncShop" @click="syncAllShop()" class="button-common">同步商城(全部)</button>
+                <button v-if="showSyncLogistics" @click="syncLogistics()" class="button-common">同步物流(勾选项)</button>
+                <button v-if="showSyncLogistics" @click="syncAllLogistics()" class="button-common">同步物流(全部)</button>
                 <slot name="button-box"></slot>
            </div>
-         <el-table ref="table_box" :default-sort = "{prop: 'id', order: 'descending'}" highlight-current-row  border max-height="600" :data="dataList" @row-dblclick="detail"  @sort-change="sortChange">
+         <el-table ref="table_box"  highlight-current-row  border max-height="600" :data="dataList" @row-dblclick="detail"  @sort-change="sortChange">
             <el-table-column  v-show="showCheckBox" type="selection" width="55"></el-table-column>
-            <el-table-column :prop="field.name" :sortable="field.sort!=null?'custom':false" resizable show-overflow-tooltip :fixed="field.name==='id'||field.name==='item_name'||field.name==='user_info'||field.name==='sell_vip_type'||field.name==='num'" :label="field.title" :key="field.name" v-for="field in showfieldList"  :width="field.width||100">
+            <el-table-column :prop="field.name" :sortable="field.sort!=null?'custom':false" resizable show-overflow-tooltip :fixed="field.name==='id'||field.name==='item_name'||field.name==='shop_sync_flag'||field.name==='user_info'||field.name==='sell_vip_type'||field.name==='num'" :label="field.title" :key="field.name" v-for="field in showfieldList"  :width="field.width||100">
                 <template slot-scope="scope">
-                  <template v-if="field.selectList">
-                            {{getSelectName(scope.row[field.name],field.selectList)}}
+                  <template v-if="field.name==='shop_sync_flag'">
+                      <i class="el-icon-success" style="color: red;" v-if='scope.row[field.name]===1'></i>
+                      <i class="el-icon-error" v-if='scope.row[field.name]===0'></i>
+                  </template>
+                  <template v-else-if="field.selectList">
+                        {{getSelectName(scope.row[field.name],field.selectList)}}
                     </template>
                     <template v-else-if="field.type==='time'">
                         {{formatTime(scope.row[field.name])}}
                     </template>
+                    
                     <template v-else>
                         {{scope.row[field.name]}}
                     </template>
-                  <!-- <common-td :field="field" :value="scope.row[field.name]"></common-td>                    -->
                 </template>
               </el-table-column>
               <el-table-column  v-if="showOper" fixed="right" label="操作"  :width="operWidth">
@@ -58,6 +71,8 @@
                         <a  class="button-table-td" v-show="showSlect" @click.stop="selectOne(scope.row)">选择</a>
                         <a  class="button-table-td" v-show="showCheckBack&&authDic.Sell_checkNo.auth" @click.stop="checkBack(scope.row)">反审核</a>
                         <a  class="button-table-td" v-if="showSyncShop" @click="syncShop(scope.row)" >同步商城</a>
+                        <a  class="button-table-td" v-if="showSyncLogistics" @click="syncLogistics(scope.row)" >同步物流</a>
+                        <a  class="button-table-td" v-if="showRefrshLogistics" @click="RefreshLogistics(scope.row)" >刷新物流</a>
                         <a  class="button-table-td" v-show="showSplit&&(scope.row.logistics_merge)&&authDic.Sell_splitOrder.auth" @click.stop="split(scope.row)">拆单</a>
                     </div>
                   </template>
@@ -87,7 +102,7 @@
             v-if="syncshopPanel"
             title="选择导出商店"
             :fieldList="[ { name: 'shop', title: '商店', selectList: shopList,changeable:true},]" 
-            :dialogdata="{'shop':0}" 
+            :dialogdata="{'shop':'6'}" 
             v-on:close="syncshopPanel=false" 
             v-on:sure="syncshopSure">
         </add-dialog>
@@ -114,7 +129,7 @@ import AddDialog from 'src/views/common/common_dialog';
 import CommonSearch from 'common/components/common_searchbox'
 import CommonTable from 'common/components/common_table'
 import CommonTd from 'common/components/common_td'
-import global from 'src/global'
+
 export default{
   name: 'sell',
   mixins: [myMixin],
@@ -138,6 +153,7 @@ export default{
       dialogtitle: '',
       checkPanelShow: false,
       allStore: model.store.list,
+      syncAll: false,
       checkItem: null//
 
     }
@@ -150,8 +166,6 @@ export default{
     CommonTable,
     CommonSearch,
     SelectCheckStore
-  },
-  watch: {
   },
   props: {
     serverModelName: {// 服务器对应的control名
@@ -168,15 +182,17 @@ export default{
     showEdit: { type: Boolean, default: false }, // 是否显示编辑按键
     showSplit: { type: Boolean, default: false }, // 是否显示拆单按键
     showSyncShop: { type: Boolean, default: false }, // 是否显示同步到商城
+    showSyncLogistics: { type: Boolean, default: false }, // 是否显示同步到商城
+    showRefrshLogistics: { type: Boolean, default: false }, // 是否显示刷新物流
     showMerge: { type: Boolean, default: false }, // 是否显示合单按键
     showCheckBack: { type: Boolean, default: false }, // 是否显示反审核按键
     searchConditon: { type: Object, default: null },
 
-    operWidth: { type: String, default: '200' },
+    operWidth: { type: String, default: '250' },
     showSearchFiled: { // 显示的搜索字段
       type: Array,
       default() {
-        return ['id', 'shop_order', 'item_name', 'store_id', 'item_short_name', 'status', 'num',
+        return ['id', 'shop_order', 'item_name', 'store_id', 'item_short_name', 'status', 'num', 'supply_source',
           'customer_account', 'shop_id', 'assign_order', 'customer_name', 'user_phone', 'logistics', 'track_man', 'pay_time', 'order_time'];
       }
     },
@@ -187,13 +203,14 @@ export default{
         return ['id', 'item_name',
           'num', 'status', 'shop_name', 'customer_account', 'unit_price', 'pay_money', 'order_time', 'pay_time',
           'send_user_name', 'send_user_phone', 'customer_addr',
-          'customer_name', 'track_man', 'shop_order',
+          'customer_name', 'track_man', 'shop_order', 'pay_id', 'supply_source',
           'user_info', 'sell_vip_type']
       }
     },
     showSearch: { type: Boolean, default: true }, // 是否显示搜索按键
     showSlect: { type: Boolean, default: false }, // 是否显示选择按键
     showCheckBox: { type: Boolean, default: false }, // 是否显示单选框
+    initgetdata: { type: Boolean, default: true }, // 是否开始就获取数据
     showOper: { type: Boolean, default: false }// 是否显示操作栏
   },
   watch: {
@@ -204,12 +221,9 @@ export default{
   },
   methods: {
 
-    rowDbClick(row, event) {
-      console.log('rowDbClick', row, event);
-      this.detailInfo = row;
-      this.dialogDetailShow = true;
+    beoreupload() {
+      model.app.loading ++;
     },
-
     split(item) {
       post(this.serverModelName, 'splitOrder', { id: item.id })
       .then(() => {
@@ -236,9 +250,9 @@ export default{
       // console.log('selection', selection);
       const checkArr = []
       selection.forEach(item => {
-         checkArr.push(item.id);
-         if (cb) { cb(item) }
-       })
+        checkArr.push(item.id);
+        if (cb) { cb(item) }
+      })
       return checkArr;
     },
     merge() {
@@ -345,6 +359,7 @@ export default{
       });
     },
     changeShipnumOk(resp) {
+      model.app.loading --;
       if (resp.code === '1') {
         this.$message({ message: '批量修改成功', type: 'success', duration: 1000 })
         this.getData();
@@ -354,6 +369,7 @@ export default{
     },
     handleSuccess(resp) {
       console.log('get resp', resp)
+      model.app.loading --;
       if (resp.code === '1') {
         this.$message({ message: '导入成功', type: 'success', duration: 1000 })
         this.getData();
@@ -362,6 +378,7 @@ export default{
       }
     },
     handleErr(err) {
+      model.app.loading --;
       console.log('handleErr', err)
       this.$message({ message: '导入失败', type: 'error', duration: 1000 });
     },
@@ -402,35 +419,100 @@ export default{
       console.log('sortChange', column);
       for (let i = 0; i < this.showfieldList.length; i++) {
         if (this.showfieldList[i].name === column.prop) {
-          // console.log('get i', i);
-          util.ChangeOrder(this.showfieldList, i)
-          if (this.getData) {
-            this.getData();
+          if (column.order === 'descending') {
+            this.showfieldList[i].sort = 1
+            util.ChangeOrder(this.showfieldList, i)
+          } else if (column.order === 'ascending') {
+            this.showfieldList[i].sort = 2
+            util.ChangeOrder(this.showfieldList, i)
           }
+          break;
         }
       }
+      if (this.getData) {
+        this.getData();
+      }
     },
-    // tableSelect(selection) {
-    //   console.log('selection', selection);
-    //   selection.forEach(item => {
-    //     this.checkList.push(item.id);
-    //   })
-    // },
     syncShop(item) {
       this.syncshopPanel = true
       this.checkItem = item;
+      this.syncAll = false;
+    },
+    syncAllShop(item) {
+      this.syncshopPanel = true
+      this.checkItem = item;
+      this.syncAll = true;
+    },
+    syncLogistics(item) {
+      this.syncAll = false;
+      this.syncLogisticsSend(item)
+    },
+    syncAllLogistics() {
+      this.syncAll = true;
+      this.syncLogisticsSend()
+    },
+    syncLogisticsSend(checkItem) {
+      let checkarr = {}
+      if (!checkItem) {
+        checkarr = this.gettableSelct();
+      } else {
+        checkarr = [checkItem.id];
+      }
+      let search = this.getSearch(this.searchFilter);
+      if (this.syncAll) {
+        checkarr = undefined;
+      } else {
+        search = undefined;
+      }
+
+      post(this.serverModelName, 'syncOrderShipNum', { id: checkarr, search })
+      .then(data => {
+        console.log('data', data)
+        this.$message({
+          message: '成功',
+          type: 'success', duration: 2000 });
+        this.getData();
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+    },
+    RefreshLogistics(item) {
+      post(this.serverModelName, 'RefreshLogistics', { id: item.id })
+      .then(data => {
+        console.log('data', data)
+        this.$message({
+          message: '成功',
+          type: 'success', duration: 2000 });
+        this.getData();
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
     },
     syncshopSure(changedata) {
+      let search = this.getSearch(this.searchFilter);
       let checkarr = {}
       if (!this.checkItem) {
         checkarr = this.gettableSelct();
       } else {
         checkarr = [this.checkItem.id];
       }
-      post(this.serverModelName, 'syncOrderShipNum', { shop_id: changedata.shop, id: checkarr })
-      .then(() => {
-        this.$message({ message: '同步成功', type: 'success', duration: 1000 });
+      if (this.syncAll) {
+        checkarr = undefined;
+      } else {
+        search = undefined;
+      }
+      post(this.serverModelName, 'syncOrderShipNum', { shop_id: changedata.shop, id: checkarr, search })
+      .then(data => {
+        console.log('data', data)
+        this.$message({
+          // dangerouslyUseHTMLString: true,
+          // message: '<p style="word-break: break-all;">以下物流号同步成功:<br/>' + showhtml + '</p>',
+          message: '成功',
+          type: 'success', duration: 2000 });
         this.syncshopPanel = false
+        this.getData();
       })
       .catch(error => {
         console.log('error', error);
@@ -438,6 +520,7 @@ export default{
     }
 
   },
+
 
   created() {
     // 初始化搜索相关数据
@@ -473,7 +556,9 @@ export default{
       Object.assign(this.search, this.searchConditon);
     }
     // 获取数据
-    this.getData();
+    if (this.initgetdata) {
+      this.getData();
+    }
   }
 }
 </script>

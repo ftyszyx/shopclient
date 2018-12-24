@@ -42,6 +42,7 @@ data.all = function() {
 data.initData = function(item) {
   item.num = 0;
   item.price = 0;
+  item.type = item.type+""
   item.in_store_num = 0;
   item.total_price = 0;
 }

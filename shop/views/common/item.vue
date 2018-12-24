@@ -5,23 +5,17 @@
                     <i class="mintui mintui-back"></i>
                     <span>返回</span>
                 </div>
-                <div class="header-title flexbox1">商品详情</div>
+                <div flex-box="1" class="header-title">商品详情</div>
             </div>
         <!-- 标题 -->
         <div class="content-box-bottom content-box-top">
             <!-- 图片 -->
             <mt-swipe :auto="4000" style="height:250px;">
-                    <mt-swipe-item  :key="index" v-for="(pic,index) in iteminfo.pics"><img :src="pic"></mt-swipe-item>
+                    <mt-swipe-item  :key="index" v-for="(pic,index) in iteminfo.pics"><img style="height:100%;display:block;margin:0 auto;"  :src="pic+suffix"></mt-swipe-item>
             </mt-swipe>
             <div class="info">
-                <h1 class="price">{{"￥"+iteminfo.price}}</h1>
-                <h1 class="name">{{iteminfo.name}}</h1>
-            </div>
-            <div style="box-shadow: 0 3px 3px rgba(0, 0, 0, .03);background: #fff;">
-                <hr style="border: 1px solid #F0F0F0;">
-                <div class="sellinfo">
-                    <span>销量：{{iteminfo.sell_num}}笔</span>
-                </div>
+                <h1 class="price">{{"￥"+ getGroupPrice(iteminfo.price, iteminfo.group_price)}}</h1>
+                <h1 class="name">{{iteminfo.name}}<span style="color:red;" v-if="iteminfo.item_shelf_life||''!==''">(保质期:{{iteminfo.item_shelf_life}})</span></h1>
             </div>
             <div class="detailtitle">商品详情</div>
             <hr class="with-margin-l">
@@ -36,8 +30,8 @@
                 </div>
                 <!-- <span style="font-size:14px;">购物车</span> -->
             </div>
-            <div class="btnitem-card flexbox1" @click="addtoCart()">加入购物车</div>
-            <div class="btnitem-buy flexbox1" @click="buy()">立即购买</div>
+            <div flex-box="1" class="btnitem-card" @click="addtoCart()">加入购物车</div>
+            <div flex-box="1" class="btnitem-buy" @click="buy()">立即购买</div>
         </div>
 
         <add-cart v-on:close="showAddCartPanel=false" :onlyaddCart="onlyaddCart" :iteminfo="iteminfo" v-if="showAddCartPanel"></add-cart>
@@ -49,17 +43,21 @@ import { all } from 'common/api'
 import AddCart from './addcart'
 import shopitemModel from 'admin/model/shop_item'
 import mymix from 'src/mixin'
+// import model from 'src/model'
 export default{
+  name: 'commonitem',
   mixins: [mymix],
   data() {
     return {
       iteminfo: {},
       showAddCartPanel: false,
+    //   shopcart: model.user.shop_cart,
       onlyaddCart: false
 
     }
   },
   watch: {
+
   },
   components: {
     AddCart
@@ -91,6 +89,7 @@ export default{
       const info = response.list[0]
       shopitemModel.initData(info)
       this.iteminfo = info
+      console.log('force item update')
       this.$forceUpdate();
     })
     .catch(err => {

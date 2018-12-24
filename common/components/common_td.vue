@@ -11,11 +11,11 @@
             </template>
              <template v-else-if="field.type==='pic'">
                 <img src="~common/img/upload-common-select.png" v-if="!curvalue">
-                <img class="pic" :src="curvalue" v-if="curvalue">
+                <img class="pic" :src="curvalue+suffix" v-if="curvalue" @click.stop="showpic(curvalue)" >
             </template>
             <template v-else-if="field.type==='pics'">
                 <img src="~common/img/upload-common-select.png" v-if="!curvalue">
-                <img class="pic" :src="curvalue[0]" v-if="curvalue">
+                <img class="pic" :src="curvalue[0]+suffix" v-if="curvalue">
             </template>
             <template v-else-if="field.type==='bool'">
                 {{curvalue===1?"是":"否"}}
@@ -28,6 +28,15 @@
             <template v-else>
                 {{curvalue}}
             </template>
+             <add-dialog 
+                v-if="showPreview"
+                title="图片预览"
+                v-on:close="showPreview=false" 
+                :showfooter="false">
+                <template slot="edititembox"  >
+                    <img :src="previewpic+suffix" style="max-width:180px;">
+                </template>
+              </add-dialog>
        </div>
        
 </template>
@@ -35,18 +44,25 @@
 <script>
 import util from 'common/utils'
 import conf from 'src/config'
+import comonglobal from 'common/global'
+import AddDialog from 'src/views/common/common_dialog';
 export default{
   name: 'CommonTd',
   data() {
     return {
-      curvalue: null,
-      miniurl: conf.miniurl
+      showPreview: false,
+      previewpic: '',
+      suffix: comonglobal.pic_suffix,
+      curvalue: null
     }
   },
   watch: {
     value() {
       this.curvalue = this.value
     }
+  },
+  components: {
+    AddDialog
   },
   props: {
     field: {
@@ -55,6 +71,10 @@ export default{
     value: null
   },
   methods: {
+    showpic(pic) {
+      this.showPreview = true
+      this.previewpic = pic;
+    },
       // 格式化时间
     getSelectName(value, selectlist) { return util.getSelectName(value, selectlist) },
     formatDate(time) { return util.formatDate(time) },
@@ -69,6 +89,6 @@ export default{
 <style scoped>
 .pic{
       max-width:140px;
-    max-height: 100px;
+    max-height: 50px;
 }
 </style>

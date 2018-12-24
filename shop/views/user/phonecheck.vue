@@ -9,16 +9,16 @@
      <div class="content content-box-top"  >
        <div class="rowitem" flex="dir:left main:left cross:center" >
          <label>手机号:</label>
-         <input type="text" class="flexbox1"    placeholder="输入手机号" v-model="phone">
+         <input type="text" flex-box="1"    placeholder="输入手机号" v-model="phone">
        </div>
        <div class="rowitem" flex="dir:left main:left cross:center" >
          <label>验证码:</label>
-         <input type="text" class="flexbox1"  placeholder="输入验证码" v-model="captchaCode">
+         <input type="text" flex-box="1"  placeholder="输入验证码" v-model="captchaCode">
           <img :src="captchpath" height="48px" width="100px" @click="refresh()">
        </div>
        <div class="rowitem" flex="dir:left main:left cross:center" >
          <label>动态码:</label>
-         <input type="text"  class="flexbox1"   placeholder="输入动态码" v-model="code">
+         <input type="text"  flex-box="1"   placeholder="输入动态码" v-model="code">
          <div class=" blue-color rowitem-button" @click="getCode()">获取验证码</div>
        </div>
         <div class="blue-color loginbtn"  @click="handleSubmit()">{{suretext}}</div>

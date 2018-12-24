@@ -4,6 +4,8 @@ import global from 'src/global.js'
 // 数据
 const data = {
   list: [],
+  dic: {},
+
   openMenus: [],
   topTypeList: []
 }
@@ -21,7 +23,7 @@ data.fieldList = [
 data.all = function() {
   all('posttype', null, null, null, { is_del: 0 }).then(Response => {
     Response.list.forEach(this.initData);
-    util.updateCascaderChild(Response.list, this.list, this.openMenus, this.topTypeList)
+    util.updateCascaderChild(Response.list, this.list, this.openMenus, this.topTypeList, this.dic)
   })
   .catch(error => {
     console.log('error', error);

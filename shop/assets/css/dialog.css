@@ -8,14 +8,16 @@
 
 .dailog-box {
     position: fixed;
-    z-index: 3;
+    /* position: absolute; */
+    z-index: 2;
     top: 0;
+    left: 0;
     bottom: 0;
     width: 100%;
 }
 
 .dailog-box .dailog-mask {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     width: 100%;
@@ -26,5 +28,6 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    
     background-color: #fff;
 }

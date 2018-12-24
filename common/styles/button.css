@@ -4,11 +4,11 @@
 
 /* 按键 */
 .button-common{
-  margin-right: 5px;
-  margin-top: 5px;
+  margin-right: 3px;
+  margin-top: 3px;
   background: #0072d2;
   display:inline-block;
-  padding: 5px 5px;
+  padding: 3px 3px;
   color: #ffffff;
   border: 0;
 }

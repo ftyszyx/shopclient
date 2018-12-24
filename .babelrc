@@ -6,7 +6,7 @@
        //强制开启某些模块，默认为[]
      "include": ["transform-es2015-arrow-functions"],
       "targets": {
-        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+        "browsers": ["> 1%", "last 7 versions", "not ie <= 8"]
       }
     }
   ],

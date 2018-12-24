@@ -1,6 +1,7 @@
 
 .mint-indicator {
   z-index: 3;
+  position: fixed;
   -webkit-transition: opacity .2s linear;
   transition: opacity .2s linear;
 }

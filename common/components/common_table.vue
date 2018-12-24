@@ -28,7 +28,7 @@
                 </thead>
                 <!-- 表内容 -->
                 <tbody>
-                  <template   v-for="value in curDataList" v-if="!(value.canshow===false)" >
+                  <template   v-for="(value,index) in curDataList" v-if="!(value.canshow===false)" >
                     <slot v-bind:value="value">
                         <tr :key="value.id" @dblclick="clickRow(value)"  @click="selectrow(value)">                 
                               <td v-show="showCheck">
@@ -41,7 +41,7 @@
                               </slot>
                               <td v-show="showoper" >
                                   <div>
-                                      <slot name="rowbtn" v-bind:value="value"></slot>
+                                      <slot name="rowbtn" v-bind:value="value"  v-bind:rowindex="index"></slot>
                                   </div>
                               </td>
                           </tr>
@@ -115,6 +115,7 @@ export default{
     }
   },
   created() {
+    util.copyList(this.dataList, this.curDataList)
   }
 }
 </script>

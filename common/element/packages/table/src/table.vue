@@ -164,7 +164,7 @@
   import TableFooter from './table-footer';
   import { mousewheel } from './util';
 
-  let tableIdSeed = 1;
+  const tableIdSeed = 1;
 
   export default {
     name: 'ElTable',
@@ -174,9 +174,9 @@
     props: {
       data: {
         type: Array,
-        default: function() {
-          return [];
-        }
+        default() {
+        return [];
+      }
       },
 
       size: String,
@@ -297,7 +297,7 @@
       bindEvents() {
         const { headerWrapper, footerWrapper } = this.$refs;
         const refs = this.$refs;
-        let self = this;
+        const self = this;
         this.bodyWrapper.addEventListener('scroll', function() {
           if (headerWrapper) headerWrapper.scrollLeft = this.scrollLeft;
           if (footerWrapper) footerWrapper.scrollLeft = this.scrollLeft;
@@ -453,7 +453,7 @@
 
         if (this.maxHeight) {
           style = {
-            bottom: (this.layout.scrollX && this.data.length) ? this.layout.gutterWidth + 'px' : ''
+            bottom: this.layout.scrollX && this.data.length ? this.layout.gutterWidth + 'px' : ''
           };
         } else {
           style = {

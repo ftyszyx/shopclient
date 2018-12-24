@@ -5,35 +5,34 @@
             <i class="mintui mintui-back"></i>
             <span>返回</span>
           </div>
-          <div class="header-title flexbox1">购物车</div>
+          <div flex-box="1" class="header-title ">购物车</div>
           <div v-show="editmode==false"  @click="editmode=true">编辑</div>
           <div v-show="editmode" @click="editmode=false">完成</div>
      </div>
-     <div class= "content-box-top emptybox flexbox1" v-if="shop_cart.length===0" flex="dir:top main:center cross:center">
+     <div flex-box="1" class= "content-box-top emptybox " v-if="shop_cart.length===0" flex="dir:top main:center cross:center">
        <img src="~assets/img/cart-empty.png">
        <div style="font-size: 15px;color: #d4d4d4;">你的购物车是空的</div>
        <router-link to="/" slot="left" class="button-orange">去逛逛</router-link>
      </div>
-     <ul v-if="shop_cart.length>0" class="content-box-top flexbox1" flex="dir:top main:left cross:left">
-        <li class="bootom-split" style="width:100%;height:60px;" flex="dir:left main:left cross:center" :key="'good'+index" v-for="(item,index) in shop_cart">
+     <ul v-if="shop_cart.length>0" flex-box="1" class="content-box-top " flex="dir:top main:left cross:left">
+        <li class="bootom-split" style="width:100%;height:60px;" flex="dir:left main:left cross:center" :key="'good'+index" v-for="(item,index) in shop_cart" @click="gotoitem(item.itemid)" >
           
-          <div @click="checkitem(item)" style="padding:5px;">
+          <div @click.stop="checkitem(item)" style="padding:5px;">
             <i style="font-size: 25px;color: red;" v-show="!item.check" class="iconfont zyx-checkno"></i>
             <i style="font-size: 25px;color: red;"  v-show="item.check" class="iconfont zyx-check"></i>
-            
           </div>
           
-          <img :src="item.pic" style="max-width:40px;">
-          <div class="info flexbox1" flex="dir:top main:left cross:left">
+          <img :src="item.pic+suffix" style="max-width:40px;">
+          <div flex-box="1" class="info " flex="dir:top main:left cross:left">
             <div>{{item.name}}</div>
-            <div>规格:{{item.specname}}</div>
+            <div v-if="item.specname!==''">规格:{{item.specname}}</div>
           </div>
            <div flex="dir:top main:left cross:left">
-              <div style="color:red;">￥{{item.price*item.num}}</div>
+              <div style="color:red;">￥{{getPriceValue(item.price)*item.num}}</div>
               <div flex="dir:left main:left cross:center">
-                  <div class="buttnadd" @click="item.num=item.num-1">-</div>
-                    <input  class="numinput" type="number"  v-model.number="item.num">
-                  <div class="buttnadd" @click="item.num=item.num+1">+</div>
+                  <div class="buttnadd" @click.stop="item.num=delnum(item.num,item);getTotalPrice()">-</div>
+                    <input @click.stop class="numinput" type="number"  v-model.number="item.num" v-on:change="input_numchange(arguments[0],item);getTotalPrice()">
+                  <div class="buttnadd" @click.stop="item.num=addnum(item.num,item);getTotalPrice()">+</div>
               </div>
            </div>
         </li>
@@ -45,7 +44,7 @@
             <i style="font-size: 25px;color: red;"  v-show="checkall" class="iconfont zyx-check"></i>
             全选
           </div>
-        <div class="flexbox1 bottom-text" v-show="editmode===false">合计<span style="color:red;">￥{{totalprice}}</span></div>
+        <div flex-box="1" class=" bottom-text" v-show="editmode===false">合计<span style="color:red;">￥{{totalprice}}</span></div>
         <div class="bottom-button" v-show="editmode===false" @click="pay()"> 结算</div>
         <div  class="bottom-button" v-show="editmode" @click="del()"> 删除所选</div>
      </div>
@@ -59,6 +58,7 @@ import { post } from 'common/api'
 import mymix from 'src/mixin'
 // 框架
 export default{
+  name: 'shopcart',
   mixins: [mymix],
   data() {
     return {
@@ -78,11 +78,14 @@ export default{
     },
     checkall() {
       this.checkallFun()
-      getTotalPrice();
+      this.getTotalPrice();
     }
   },
 
   methods: {
+    gotoitem(itemid) {
+      this.$router.push({ path: '/item/' + itemid });
+    },
     checkitem(item) {
       item.check = !item.check
       this.getTotalPrice();
@@ -105,12 +108,14 @@ export default{
       });
     },
     del() {
-      this.shop_cart.forEach((item, index) => {
-        if (item.check === true) {
-          this.shop_cart.splice(index, 1)
+      const new_cart = []
+      this.shop_cart.forEach(item => {
+        if (item.check === false) {
+          // this.shop_cart.splice(index, 1)
+          new_cart.push(item)
         }
       });
-      post('user', 'UpdateCart', { shop_cart: JSON.stringify(this.shop_cart) })
+      post('user', 'UpdateCart', { shop_cart: JSON.stringify(new_cart) })
       .then(() => {
         this.$toast('删除成功')
         models.user.getinfo()
@@ -135,6 +140,7 @@ export default{
     }
   },
   created() {
+    this.getTotalPrice();
     models.user.checkLogin()
   }
 }

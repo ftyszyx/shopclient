@@ -20,7 +20,7 @@ function resolveApp(relativePath) {
 
 const getconf = function(pagename) {
   const baseWebpackConfig = require('./webpack.base.conf')(config.webpath)
-  const htmlname = config.webpath + '.ejs';
+  const htmlname = config.html + '.ejs';
   const outpath = path.join(config.build.assetsRoot, config.outpath);
   const indexpath = path.join(config.build.index, config.outpath);
   const webpackConfig = merge(baseWebpackConfig, {
@@ -61,7 +61,7 @@ const getconf = function(pagename) {
       }),
       
       // css 压缩
-      new OptimizeCSSPlugin(),
+      // new OptimizeCSSPlugin(),
             // generate dist index.html with correct asset hash for caching.
             // you can customize output by editing /index.html
             // see https://github.com/ampedandwired/html-webpack-plugin

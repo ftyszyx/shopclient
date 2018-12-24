@@ -3,7 +3,7 @@
   <!-- 顶部菜单 -->
 <div class="top">
   <div class="left-top">
-    <span id="title">系统</span>
+    <span id="title">{{system_name}}系统</span>
   </div>
   
   <ul class="top-right">
@@ -89,6 +89,7 @@ export default{
       showMenuList: [], // 显示的主菜单
       showSubMenu: [],
       active_menu_name: '',
+      system_name:"",
       active_menu_path: '',
       active_submenu_name: '',
       app: models.app,
@@ -214,14 +215,33 @@ export default{
     }
   },
   created() {
-    models.userGroup.all();
-    models.module.all();
-    models.adspos.all();
-    models.album.all()
-    models.posttype.all()
-    models.shopitemtype.all()
-    models.shoptag.all()
-    models.shopbrand.all()
+    if (config.appname === 'admin') {
+      this.system_name="商城"
+      models.userGroup.all();
+      models.module.all();
+      models.adspos.all();
+      models.album.all()
+      models.posttype.all()
+      models.shopitemtype.all()
+      models.shoptag.all()
+      models.shopbrand.all()
+      models.user.allAdmin()
+    } else if (config.appname === 'ship') {
+      this.system_name="物流"
+      models.userGroup.all();
+      models.module.all();
+      models.album.all()
+      models.posttype.all()
+      models.logistics_task.all()
+    } else if (config.appname === 'home') {
+      this.system_name="官网"
+      models.userGroup.all();
+      models.module.all();
+      models.album.all()
+      models.posttype.all()
+      models.adspos.all();
+    }
+
     this.initdata();
   }
 

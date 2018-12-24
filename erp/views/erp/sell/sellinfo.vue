@@ -57,7 +57,6 @@ export default{
     }
   },
   created() {
-    model.store.all();
     // 初始化搜索相关数据
     util.filterField(this.fieldList, this.detailFieldList, true, 'shop_id',
     'store_id', 'build_user', 'check_user', 'item_id');

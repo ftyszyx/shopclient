@@ -113,7 +113,7 @@ export default{
       }
     })
     // 初始化表格需要显示的字段
-    util.filterField(this.fieldList, this.showfieldList, false, 'name', 'order_id', 'code', 'pic', 'info');
+    util.filterField(this.fieldList, this.showfieldList, false, 'name', 'is_del', 'order_id', 'code', 'pic', 'info');
     // 获取数据
     this.getData();
   }

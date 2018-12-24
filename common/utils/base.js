@@ -59,6 +59,7 @@ base_tool.getTime = function(timestr) {
 }
 
 
+
 base_tool.getTimeStr = function(timestr) {
   const time = base_tool.getTime(timestr);
   return base_tool.FormatTime(time, 'yyyy-MM-dd hh:mm:ss')
